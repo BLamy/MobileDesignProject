@@ -6,11 +6,8 @@ import * as d3 from 'd3';
 import * as _ from 'lodash';
 
 import scale = d3.time.scale;
+import {PieModel} from "../typings/PieModel";
 
-export class PieModel {
-    label: string;
-    value: number;
-}
 
 @Component({
     selector: 'pie-graph',
