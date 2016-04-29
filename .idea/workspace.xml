@@ -2,19 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b31b4a6-c504-45ad-906b-8363053d1b69" name="Default" comment="Basic scaffold with bar graph + pie graph.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/components/app-scaffold.component.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/typings/Machine.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/typings/PieModel.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/typings/Status.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/typings/StatusBreakdown.ts" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/components/MachineSidebar.component.ts" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.ts" afterPath="$PROJECT_DIR$/app/app.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/pie-graph.component.ts" afterPath="$PROJECT_DIR$/app/components/pie-graph.component.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/pages/page1.ts" afterPath="$PROJECT_DIR$/app/pages/page1.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/app-scaffold.component.ts" afterPath="$PROJECT_DIR$/app/components/app-scaffold.component.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/services/mock-machines.ts" afterPath="$PROJECT_DIR$/app/services/mock-machines.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/typings/Machine.ts" afterPath="$PROJECT_DIR$/app/typings/Machine.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
     </list>
     <ignored path="MobileDesignProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,17 +30,33 @@
       <file leaf-file-name="app.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/app.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="104" column="70" selection-start-line="104" selection-start-column="70" selection-end-line="104" selection-end-column="70" />
+            <state relative-caret-position="525">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1461891503000" expanded="true" signature="2165:3336" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2187:2499" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2224:2330" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2347:2476" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2550:3314" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2590:2675" placeholder="..." />
-                <marker date="1461891503000" expanded="true" signature="2752:3291" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3060:4648" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3082:3466" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3119:3225" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3242:3443" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3366:3425" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3517:4626" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3589:3701" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3817:4603" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3871:3982" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3888:3889" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3888:3905" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="3931:3976" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4023:4124" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4040:4052" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4078:4118" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4165:4274" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4182:4198" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4224:4268" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4315:4408" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4332:4340" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4366:4402" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4467:4496" placeholder="..." />
+                <marker date="1461901228000" expanded="true" signature="4538:4567" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -57,60 +65,9 @@
       <file leaf-file-name="Machine.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/typings/Machine.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+            <state relative-caret-position="270">
+              <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bar-graph.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/components/bar-graph.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-              <folding>
-                <marker date="1461546206000" expanded="true" signature="307:345" placeholder="{...}" />
-                <marker date="1461546206000" expanded="true" signature="378:473" placeholder="{...}" />
-                <marker date="1461546206000" expanded="true" signature="472:473" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="machine.service.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/services/machine.service.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="27" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mock-machines.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/services/mock-machines.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app-scaffold.component.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/components/app-scaffold.component.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-              <folding>
-                <marker date="1461889961000" expanded="true" signature="153:273" placeholder="{...}" />
-                <marker date="1461889961000" expanded="true" signature="454:563" placeholder="{...}" />
-                <marker date="1461889961000" expanded="true" signature="454:644" placeholder="{...}" />
-                <marker date="1461889961000" expanded="true" signature="683:733" placeholder="{...}" />
-                <marker date="1461889961000" expanded="true" signature="904:939" placeholder="{...}" />
-                <marker date="1461889961000" expanded="true" signature="992:1125" placeholder="..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -136,9 +93,10 @@
         <option value="$PROJECT_DIR$/app/typings/StatusBreakdown.ts" />
         <option value="$PROJECT_DIR$/app/typings/PieModel.ts" />
         <option value="$PROJECT_DIR$/app/components/app-sidebar.component.ts" />
-        <option value="$PROJECT_DIR$/app/components/app-scaffold.component.ts" />
-        <option value="$PROJECT_DIR$/app/typings/Machine.ts" />
+        <option value="$PROJECT_DIR$/www/index.html" />
         <option value="$PROJECT_DIR$/app/services/mock-machines.ts" />
+        <option value="$PROJECT_DIR$/app/typings/Machine.ts" />
+        <option value="$PROJECT_DIR$/app/components/app-scaffold.component.ts" />
         <option value="$PROJECT_DIR$/app/app.ts" />
       </list>
     </option>
@@ -207,7 +165,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -223,6 +180,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="MobileDesignProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobileDesignProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MobileDesignProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -350,6 +321,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -435,11 +407,12 @@
       <workItem from="1461550967013" duration="103000" />
       <workItem from="1461794496272" duration="15987000" />
       <workItem from="1461888280892" duration="2400000" />
+      <workItem from="1461892508827" duration="5641000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18503000" />
+    <option name="totallyTimeSpent" value="24144000" />
   </component>
   <component name="TodoView" selected-index="3" />
   <component name="ToolWindowManager">
@@ -451,19 +424,19 @@
       <window_info id="TypeScript Compiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747456" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32747456" sideWeight="0.50394946" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32747456" sideWeight="0.49605057" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39962998" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39962998" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -479,14 +452,14 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/app.ts</url>
-          <line>139</line>
+          <line>205</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="18" />
+      <option name="time" value="19" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -648,12 +621,6 @@
           <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="17" />
           <folding>
             <element signature="e#1#60#0" expanded="false" />
-            <marker date="1461868528000" expanded="true" signature="634:766" placeholder="..." />
-            <marker date="1461868528000" expanded="true" signature="657:707" placeholder="..." />
-            <marker date="1461868528000" expanded="true" signature="722:747" placeholder="..." />
-            <marker date="1461868528000" expanded="true" signature="790:974" placeholder="..." />
-            <marker date="1461868528000" expanded="true" signature="843:880" placeholder="..." />
-            <marker date="1461868528000" expanded="true" signature="905:959" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -665,20 +632,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/typings/StatusBreakdown.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-          <folding>
-            <marker date="1461876551000" expanded="true" signature="167:343" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -701,33 +658,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="20" column="3" selection-start-line="20" selection-start-column="3" selection-end-line="20" selection-end-column="3" />
-          <folding>
-            <marker date="1461867698000" expanded="true" signature="398:473" placeholder="{...}" />
-            <marker date="1461867698000" expanded="true" signature="511:546" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/components/app-scaffold.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <marker date="1461889961000" expanded="true" signature="153:273" placeholder="{...}" />
-            <marker date="1461889961000" expanded="true" signature="454:563" placeholder="{...}" />
-            <marker date="1461889961000" expanded="true" signature="454:644" placeholder="{...}" />
-            <marker date="1461889961000" expanded="true" signature="683:733" placeholder="{...}" />
-            <marker date="1461889961000" expanded="true" signature="904:939" placeholder="{...}" />
-            <marker date="1461889961000" expanded="true" signature="992:1125" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/services/mock-machines.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/angular2/src/common/pipes/number_pipe.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -741,8 +679,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/components/bar-graph.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+        <state relative-caret-position="645">
+          <caret line="45" column="53" selection-start-line="45" selection-start-column="53" selection-end-line="45" selection-end-column="53" />
           <folding>
             <marker date="1461546206000" expanded="true" signature="307:345" placeholder="{...}" />
             <marker date="1461546206000" expanded="true" signature="378:473" placeholder="{...}" />
@@ -751,35 +689,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/typings/Machine.ts">
+    <entry file="file://$PROJECT_DIR$/www/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+          <caret line="22" column="63" selection-start-line="22" selection-start-column="63" selection-end-line="22" selection-end-column="63" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/angular2/src/common/pipes/number_pipe.d.ts">
+    <entry file="file://$PROJECT_DIR$/app/components/app-scaffold.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="32" />
+        <state relative-caret-position="300">
+          <caret line="22" column="20" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="20" />
+          <folding>
+            <marker date="1461899479000" expanded="true" signature="153:273" placeholder="{...}" />
+            <marker date="1461899479000" expanded="true" signature="454:674" placeholder="{...}" />
+            <marker date="1461899479000" expanded="true" signature="713:763" placeholder="{...}" />
+            <marker date="1461899479000" expanded="true" signature="934:969" placeholder="{...}" />
+            <marker date="1461899479000" expanded="true" signature="1022:1155" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/services/mock-machines.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="25" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/typings/Machine.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/app.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="104" column="70" selection-start-line="104" selection-start-column="70" selection-end-line="104" selection-end-column="70" />
+        <state relative-caret-position="525">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1461891503000" expanded="true" signature="2165:3336" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2187:2499" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2224:2330" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2347:2476" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2550:3314" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2590:2675" placeholder="..." />
-            <marker date="1461891503000" expanded="true" signature="2752:3291" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3060:4648" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3082:3466" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3119:3225" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3242:3443" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3366:3425" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3517:4626" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3589:3701" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3817:4603" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3871:3982" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3888:3889" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3888:3905" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="3931:3976" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4023:4124" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4040:4052" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4078:4118" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4165:4274" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4182:4198" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4224:4268" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4315:4408" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4332:4340" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4366:4402" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4467:4496" placeholder="..." />
+            <marker date="1461901228000" expanded="true" signature="4538:4567" placeholder="..." />
           </folding>
         </state>
       </provider>

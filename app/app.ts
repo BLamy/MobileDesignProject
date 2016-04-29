@@ -36,15 +36,12 @@ import {PercentPipe} from "angular2/common";
       width: 100%;
       height: 30vh;
       min-height: calc(64px * 4);
-      background-color: #66BB6A;
     }
         
     #CommentBar {
       height: 5vh;
       width: 100%;
       min-height: 44px;
-      background-color: #43A047;
-      border-top: 1px solid #66BB6A; 
     }
     
     #DashboardFlex {
@@ -74,10 +71,74 @@ import {PercentPipe} from "angular2/common";
       width: calc(100% / 2 - 40px);
     }
     
-    .card.large {
+    .card.large {33
       margin: 20px;
       padding: 20px;
       width: 100%;
+    }
+    
+    #Menu {
+      padding: 15px;
+    }
+
+    .percent-metric {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+      text-align: center;
+    }
+    
+    .card.small>.title {
+      margin: 0;
+      opacity: .71;
+    }
+    
+    ul {
+      margin: 0;
+      padding: 15px;
+      list-style:none;
+    }
+    
+    li {
+      color: white;
+      margin: 10px;
+      padding: 10px;
+    }
+    
+    .Online-border {
+       border-left: 2px solid #66BB6A;
+    }
+    
+    .Offline-border {
+       border-left: 2px solid #F44336;
+    }
+    
+    .Idle-border {
+       border-left: 2px solid #FFC107;
+    }
+    .Online {
+       background-color: #66BB6A;
+    }
+    
+    .Offline {
+       background-color: #F44336;
+    }
+    
+    .Idle {
+       background-color: #FFC107;
+    }
+    
+    .Online-dark {
+       background-color: #388E3C;
+    }
+    
+    .Offline-dark {
+       background-color: #D32F2F;
+    }
+    
+    .Idle-dark {
+       background-color: #FFA000;
     }
 
   `],
@@ -88,21 +149,26 @@ import {PercentPipe} from "angular2/common";
                 <span class="avatar">BL</span><span class="username">Brett Lamy</span>
             </div>
             <ul>
-                <li *ngFor="#machine of machines" (click)="changeActiveMachine(machine)">{{machine.name}}</li>
+                <li *ngFor="#machine of machines" (click)="changeActiveMachine(machine)" class="{{machine.status}}-border">
+                    {{machine.name}}
+                </li>
             </ul>
         </app-sidebar>
         <app-content [class.open]="isSidebarOpen">
-            <div id="LinegraphWrapper">
-                <button (click)="toggleSidebar($event)"></button>
+            <div id="LinegraphWrapper" [class]="activeMachine?.status">
+                <i id="Menu" class="material-icons" (click)="toggleSidebar($event)">menu</i>
             </div>
-            <div id="CommentBar"></div>
+            <div id="CommentBar" class="{{activeMachine?.status}}-dark"></div>
             <div id="DashboardFlex">
-                <div class="card small">Availability: {{activeMachine?.availability | percent}}</div>
-                <div class="card small">Quality: {{activeMachine?.quality | percent}}</div>
-                <div class="card small">Performance: {{activeMachine?.performance | percent}}</div>
-                <div class="card small">OEE: {{activeMachine?.oee | percent}}</div>
+            
+                <div class="card small"><p class="title">Availability:</p><p class="percent-metric">{{activeMachine?.availability | percent}}</p></div>
+                <div class="card small"><p class="title">Quality:</p><p class="percent-metric">{{activeMachine?.quality | percent}}</p></div>
+                <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine?.performance | percent}}</p></div>
+                <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine?.oee | percent}}</p></div>
+                
                 <div class="card medium"><pie-graph></pie-graph></div>
                 <div class="card medium"><bar-graph></bar-graph></div>
+                
             </div>
         </app-content>
     <app-scaffold>

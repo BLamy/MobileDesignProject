@@ -16,6 +16,9 @@ export class Machine {
     /// Quality = Good Count / Total Count
     quality: number;
 
+    /// ['Online', 'Offline', 'Idle'] 
+    status: string;
+
     /// Performance = (Ideal Cycle Time × Total Count) / Run Time
     performance: number;
 

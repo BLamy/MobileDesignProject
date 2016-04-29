@@ -20,6 +20,7 @@ export class AppSidebarComponent {}
     styles: [`
         :host-context {
           position: absolute;
+          overflow-y: scroll;
           height: 100%;
           width: 100%;
           background: #F2F2F2;
