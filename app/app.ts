@@ -43,6 +43,7 @@ import {LineGraphComponent} from "./components/line-graph.component";
     line-graph {
       position: absolute;
       bottom: 0;
+      right: 0;
     }
         
     #CommentBar {
@@ -54,9 +55,11 @@ import {LineGraphComponent} from "./components/line-graph.component";
     #DashboardFlex {
       display: flex;
       flex-wrap: wrap; 
+      margin: 5px;
     }
     
     .card {
+      overflow: hidden;
       background-color: white;
       border-radius: 2px;
       transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -66,21 +69,31 @@ import {LineGraphComponent} from "./components/line-graph.component";
     }
     
     .card.small {
-      margin: 20px;
+      margin: 10px;
       padding: 20px;
-      width: calc(100% / 4 - 40px);
+      width: calc(100% / 4 - 20px);
      }
     
     .card.medium {
-      margin: 20px;
+      margin: 10px;
       padding: 20px;
-      width: calc(100% / 2 - 40px);
+      width: calc(100% / 2 - 20px);
     }
     
     .card.large {33
       margin: 20px;
       padding: 20px;
       width: 100%;
+    }
+    
+    @media (max-width: 1023px) {
+      .card.small {
+        width: calc(100% / 2 - 20px);
+      }
+      
+      .card.medium {
+        width: 100%;
+      }
     }
     
     #Menu {
@@ -147,6 +160,10 @@ import {LineGraphComponent} from "./components/line-graph.component";
     .Idle-dark {
        background-color: #FFA000;
     }
+    
+    .center-text {
+      text-align:center
+    }
 
   `],
   template: `
@@ -174,8 +191,8 @@ import {LineGraphComponent} from "./components/line-graph.component";
                 <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine?.performance | percent}}</p></div>
                 <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine?.oee | percent}}</p></div>
                 
-                <div class="card medium"><pie-graph></pie-graph></div>
-                <div class="card medium"><bar-graph></bar-graph></div>
+                <div class="card medium center-text"><pie-graph></pie-graph></div>
+                <div class="card medium center-text"><bar-graph></bar-graph></div>
                 
             </div>
         </app-content>

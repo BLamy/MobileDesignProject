@@ -11,7 +11,7 @@ export var MACHINES: Machine[]= [
         oee: .75,
         statusBreakdown: [
             {status: Status.Online, time: 100000},
-            {status: Status.Offline, time: 100000},
+            {status: Status.Offline, time: 1000},
             {status: Status.Idle, time: 100000}
         ]
     },
@@ -23,7 +23,7 @@ export var MACHINES: Machine[]= [
         performance: .81,
         oee: .70,
         statusBreakdown: [
-            {status: Status.Online, time: 100000},
+            {status: Status.Online, time: 10000},
             {status: Status.Offline, time: 10000},
             {status: Status.Idle, time: 10000}
         ]

@@ -10,8 +10,6 @@ import * as d3 from 'd3';
     encapsulation: ViewEncapsulation.None,
 
     styles:[`
-
-
         line-graph .line{
           fill: none;
           stroke: white;
@@ -53,8 +51,8 @@ export class LineGraphComponent implements OnInit {
             scrollData = d3.range(n).map(_ => 0);
 
         const margin = {top: 6, right: 0, bottom: 20, left: 40},
-            width = 960 - margin.right,
-            height = 120 - margin.top - margin.bottom;
+            width = 1700 - margin.right,
+            height = 220 - margin.top - margin.bottom;
 
         const x = d3.time.scale()
             .domain([now - (n - 2) * duration, now - duration])
