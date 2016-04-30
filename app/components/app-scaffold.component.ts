@@ -9,7 +9,6 @@ import {Component, ContentChild, AfterContentInit} from "angular2/core";
           background: #303030;
           width: 300px;
         }
-        
       `],
     template: '<ng-content></ng-content>'
 })
@@ -18,6 +17,13 @@ export class AppSidebarComponent {}
 @Component({
     selector: 'app-content',
     styles: [`
+        @media screen and (max-width: 1024px) {
+            :host-context {
+                margin-left: 300px;
+                width: calc(100% - 300px);
+            }
+        }
+
         :host-context {
           position: absolute;
           overflow-y: scroll;
@@ -29,9 +35,8 @@ export class AppSidebarComponent {}
         }
         
         :host-context(.open) {
-          transform:translateX(300px);
+            transform: translateX(300px);
         }
-
     `],
     template: '<ng-content></ng-content>'
 })
@@ -41,7 +46,6 @@ export class AppContentComponent {}
 @Component({
     selector: 'app-scaffold',
     styles:[`
-
         app-content {
             z-index: 1;
         }
