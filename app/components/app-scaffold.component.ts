@@ -17,12 +17,6 @@ export class AppSidebarComponent {}
 @Component({
     selector: 'app-content',
     styles: [`
-        @media screen and (max-width: 1024px) {
-            :host-context {
-                margin-left: 300px;
-                width: calc(100% - 300px);
-            }
-        }
 
         :host-context {
           position: absolute;
@@ -37,6 +31,14 @@ export class AppSidebarComponent {}
         :host-context(.open) {
             transform: translateX(300px);
         }
+        
+        @media screen and (min-width: 1400px) {
+            :host-context {
+                transform: translateX(300px);
+                width: calc(100% - 300px);
+            }
+        }
+
     `],
     template: '<ng-content></ng-content>'
 })

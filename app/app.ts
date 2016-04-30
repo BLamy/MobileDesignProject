@@ -8,11 +8,12 @@ import {AppScaffoldComponent, AppContentComponent, AppSidebarComponent} from "./
 import {BarGraphComponent} from "./components/bar-graph.component";
 import {PieGraphComponent} from "./components/pie-graph.component";
 import {PercentPipe} from "angular2/common";
+import {LineGraphComponent} from "./components/line-graph.component";
 
 @App({
   providers: [MachineService],
   pipes: [PercentPipe],
-  directives: [AppScaffoldComponent, AppContentComponent, AppSidebarComponent, BarGraphComponent, PieGraphComponent],
+  directives: [AppScaffoldComponent, AppContentComponent, AppSidebarComponent, BarGraphComponent, PieGraphComponent, LineGraphComponent],
   styles: [`
     app-sidebar #SidebarHeader {
       position: relative;
@@ -36,6 +37,12 @@ import {PercentPipe} from "angular2/common";
       width: 100%;
       height: 30vh;
       min-height: calc(64px * 4);
+      position: relative;
+    }
+    
+    line-graph {
+      position: absolute;
+      bottom: 0;
     }
         
     #CommentBar {
@@ -58,7 +65,6 @@ import {PercentPipe} from "angular2/common";
                   0 3px 1px -2px rgba(0, 0, 0, 0.2);
     }
     
-    
     .card.small {
       margin: 20px;
       padding: 20px;
@@ -79,6 +85,7 @@ import {PercentPipe} from "angular2/common";
     
     #Menu {
       padding: 15px;
+      position: absolute;
     }
 
     .percent-metric {
@@ -157,6 +164,7 @@ import {PercentPipe} from "angular2/common";
         <app-content [class.open]="isSidebarOpen">
             <div id="LinegraphWrapper" [class]="activeMachine?.status">
                 <i id="Menu" class="material-icons" (click)="toggleSidebar($event)">menu</i>
+                <line-graph></line-graph>
             </div>
             <div id="CommentBar" class="{{activeMachine?.status}}-dark"></div>
             <div id="DashboardFlex">

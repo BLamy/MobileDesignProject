@@ -31,9 +31,9 @@ export var MACHINES: Machine[]= [
     {
         name: 'Machine 3',
         status: 'Offline',
-        availability: .93,
-        quality: .92,
-        performance: .81,
+        availability: .90,
+        quality: .93,
+        performance: .84,
         oee: .70,
         statusBreakdown: [
             {status: Status.Online, time: 100000},
