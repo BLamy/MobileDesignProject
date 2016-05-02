@@ -225,6 +225,12 @@ export class MyApp implements OnInit {
       this.machines = machines;
       this.activeMachine = machines[0];
     });
+
+    this.machineService.getAsyncMachineData().subscribe(payload => {
+      if (!this.activeMachine) return;
+      this.activeMachine.status = Status[payload];
+      console.dir(Status[payload]);
+    });
   }
 
   toggleSidebar(e) {
