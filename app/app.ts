@@ -98,6 +98,7 @@ import {LineGraphComponent} from "./components/line-graph.component";
     
     #Menu {
       padding: 15px;
+      z-index: 2;
       position: absolute;
     }
 
