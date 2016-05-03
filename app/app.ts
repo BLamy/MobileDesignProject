@@ -202,7 +202,7 @@ import {Status} from "./typings/Status";
                 <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine?.performance | percent}}</p></div>
                 <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine?.oee | percent}}</p></div>
                 
-                <div class="card medium center-text"><pie-graph></pie-graph></div>
+                <div class="card medium center-text"><doughnut-graph></doughnut-graph></div>
                 <div class="card medium center-text"><bar-graph></bar-graph></div>
                 
             </div>
