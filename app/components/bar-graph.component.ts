@@ -19,7 +19,8 @@ import scale = d3.time.scale;
           text-anchor: end;
         }
     `],
-    template: ``,
+    template: ``
+    
 })
 export class BarGraphComponent implements OnInit {
     @Input() data:Array<number> = _.map(_.range(15), i => Math.floor(Math.random() * 50));

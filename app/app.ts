@@ -9,12 +9,22 @@ import {BarGraphComponent} from "./components/bar-graph.component";
 import {PieGraphComponent} from "./components/pie-graph.component";
 import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
+import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
+import {Status} from "./typings/Status";
 
 @App({
-  providers: [MachineService],
-  pipes: [PercentPipe],
-  directives: [AppScaffoldComponent, AppContentComponent, AppSidebarComponent, BarGraphComponent, PieGraphComponent, LineGraphComponent],
-  styles: [`
+    providers: [MachineService],
+    pipes: [PercentPipe],
+    directives: [
+        AppScaffoldComponent,
+        AppContentComponent,
+        AppSidebarComponent,
+        BarGraphComponent,
+        PieGraphComponent,
+        LineGraphComponent,
+        DoughnutGraphComponent
+    ],
+    styles: [`
     app-sidebar #SidebarHeader {
       position: relative;
       background-color: #212121;
@@ -167,7 +177,7 @@ import {LineGraphComponent} from "./components/line-graph.component";
     }
 
   `],
-  template: `
+    template: `
     <app-scaffold>
         <app-sidebar>
             <div id="SidebarHeader">
