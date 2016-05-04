@@ -19,11 +19,19 @@ export class MachineService {
     constructor(){
         this.machineStream = new BehaviorSubject('');
 
+        // Observable.interval(1000 * 10).startWith({status: Status.Offline}).map(x =>  Math.floor(Math.random() * 3) + 1 as Status);
         // status interval
         setInterval(function(){
             let status:Status = Math.floor(Math.random() * 3) + 1 as Status;
-            this.machineStream.next(status);
-        }.bind(this), 1000 * 30);
+            this.machineStream.next({status});
+        }.bind(this), 1000 * 10);
+        this.machineStream.next({status: Status.Offline});
+
+        // Cycle interval
+        let cycleCount = 0;
+        setInterval(function(){
+            this.machineStream.next({ cycleCount });
+        }.bind(this), 100);
     }
 
     getMachines():Promise<any> {

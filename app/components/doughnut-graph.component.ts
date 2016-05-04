@@ -1,7 +1,7 @@
 /**
  * Created by brett on 5/1/16.
  */
-import {Component, ViewEncapsulation, ElementRef, OnInit, Input} from "angular2/core";
+import {Component, ViewEncapsulation, ElementRef, OnInit, Input, SimpleChange, OnChanges} from "angular2/core";
 import * as d3 from 'd3'
 import {PieModel} from "../typings/PieModel";
 
@@ -31,7 +31,7 @@ import {PieModel} from "../typings/PieModel";
     `],
     template: ``
 })
-export class DoughnutGraphComponent implements OnInit {
+export class DoughnutGraphComponent implements OnChanges {
 
     /// The dom target
     target: any;
@@ -46,23 +46,7 @@ export class DoughnutGraphComponent implements OnInit {
     height = 450;
     
     @Input()
-    data: Array<PieModel> = [
-        {
-            label: "Online",
-            value: 1234,
-            color: "#4CAF50"
-        },
-        {
-            label: "Offline",
-            value: 1234,
-            color: "#F44336"
-        },
-        {
-            label: "Idle",
-            value: 1234,
-            color: "#FFC107"
-        }
-    ];
+    data: Array<PieModel> = [];
 
     /// The radius of the graph
     get radius():number {
@@ -74,13 +58,15 @@ export class DoughnutGraphComponent implements OnInit {
         return this.data.map((item) => item.label);
     }
 
-    /// The
+    /// Returns the colors of all
     get range():Array<string> {
         return this.data.map((item) => item.color);
     }
 
-    // Used to calculate the approprate color for a given item
-    colorScale = d3.scale.ordinal().domain(this.domain).range(this.range);
+    // Used to calculate the appropriate color for a given item
+    get colorScale(){
+        return d3.scale.ordinal().domain(this.domain).range(this.range);
+    }
 
 
     pie = d3.layout.pie().sort(null).value(d => (d as any).value);
@@ -89,14 +75,20 @@ export class DoughnutGraphComponent implements OnInit {
 
     constructor(elementRef: ElementRef) {
         this.target = elementRef.nativeElement;
+        const { width, height } = this;
+
+        let svg = d3.select(this.target).append("svg").append("g");svg.append("g").attr("class", "slices");
+        svg.append("g").attr("class", "labels");
+        svg.append("g").attr("class", "lines");
+        svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        this.svg = svg;
     }
 
-    randomData (){
-        return this.colorScale.domain().map(label => {
-            return { label: label, value: Math.random() * 100 }
-        });
+    ngOnChanges(changes: {[propName: string]: SimpleChange}) {
+        let { data } = changes;
+        this.change(data.currentValue);
     }
-
 
     change(data) {
         const {svg, pie, colorScale, arc} = this;
@@ -122,16 +114,4 @@ export class DoughnutGraphComponent implements OnInit {
 
         slice.exit().remove();
     };
-
-    ngOnInit(){
-        const { width, height } = this;
-
-        let svg = d3.select(this.target).append("svg").append("g");svg.append("g").attr("class", "slices");
-        svg.append("g").attr("class", "labels");
-        svg.append("g").attr("class", "lines");
-        svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-        this.svg = svg;
-        this.change(this.data);
-    }
 }

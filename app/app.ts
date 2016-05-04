@@ -11,6 +11,8 @@ import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
 import {Status} from "./typings/Status";
+import {PieModel} from "./typings/PieModel";
+import {Observable} from "rxjs/Observable";
 
 @App({
     providers: [MachineService],
@@ -202,7 +204,7 @@ import {Status} from "./typings/Status";
                 <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine?.performance | percent}}</p></div>
                 <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine?.oee | percent}}</p></div>
                 
-                <div class="card medium center-text"><doughnut-graph></doughnut-graph></div>
+                <div class="card medium center-text"><doughnut-graph [data]="statusData"></doughnut-graph></div>
                 <div class="card medium center-text"><bar-graph></bar-graph></div>
                 
             </div>
@@ -210,45 +212,79 @@ import {Status} from "./typings/Status";
     <app-scaffold>
   `,
 
-  config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+    config: {} // http://ionicframework.com/docs/v2/api/config/Config/
 })
 export class MyApp implements OnInit {
 
-  /// Setting this variable will toggle the sidebar on mobile/tablets.
-  isSidebarOpen: boolean = false;
+    /// Setting this variable will toggle the sidebar on mobile/tablets.
+    isSidebarOpen:boolean = false;
 
-  /// The currently active machine
-  activeMachine: Machine;
+    /// The currently active machine
+    activeMachine:Machine;
 
-  /// All the machines
-  machines: Array<Machine> = [];
+    /// All the machines
+    machines:Array<Machine> = [];
 
-  constructor(platform: Platform, public machineService: MachineService) {
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      StatusBar.styleDefault();
-    });
-  }
+    statusData:Array<PieModel> = [
+        {
+            label: "Online",
+            value: 10,
+            color: "#4CAF50"
+        },
+        {
+            label: "Offline",
+            value: 1,
+            color: "#F44336"
+        },
+        {
+            label: "Idle",
+            value: 2,
+            color: "#FFC107"
+        }
+    ];
 
-  ngOnInit():any {
-    this.machineService.getMachines().then(machines => {
-      this.machines = machines;
-      this.activeMachine = machines[0];
-    });
+    constructor(platform:Platform, public machineService:MachineService) {
+        platform.ready().then(() => {
+            StatusBar.styleDefault();
+        });
+    }
 
-    this.machineService.getAsyncMachineData().subscribe(payload => {
-      if (!this.activeMachine) return;
-      this.activeMachine.status = Status[payload];
-      console.dir(Status[payload]);
-    });
-  }
+    ngOnInit():any {
+        let that = this;
 
-  toggleSidebar(e) {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
+        this.machineService.getMachines().then(machines => {
+            this.machines = machines;
+            this.activeMachine = machines[0];
+            return machines[0];
 
-  changeActiveMachine(machine) {
-    this.activeMachine = machine;
-  }
+        }).then(activeMachine => {
+            let machineDataStream = this.machineService.getAsyncMachineData();
+            let statusStream = machineDataStream.filter(item => item.hasOwnProperty('status'));
+
+            let statusAccumulator = Observable.combineLatest(statusStream, Observable.interval(1000))
+                                        .map(item => item[0].status);
+
+
+
+            statusAccumulator.subscribe(payload => {
+                activeMachine.status = Status[payload];
+                let index = that.statusData.findIndex(item => (item.label === Status[payload]));
+                let pieModel:PieModel = that.statusData[index];
+                pieModel.value ++;
+                that.statusData = [
+                    ...that.statusData.slice(0, index),
+                    pieModel,
+                    ...that.statusData.slice(index+1)
+                ];
+            });
+        });
+    }
+
+    toggleSidebar() {
+        this.isSidebarOpen = !this.isSidebarOpen;
+    }
+
+    changeActiveMachine(machine) {
+        this.activeMachine = machine;
+    }
 }
