@@ -176,6 +176,7 @@ import {Observable} from "rxjs/Observable";
         .center-text {
         text-align:center
         }
+
   `],
     template: `
     <app-scaffold>
@@ -190,19 +191,19 @@ import {Observable} from "rxjs/Observable";
             </ul>
         </app-sidebar>
         <app-content [class.open]="isSidebarOpen">
-            <div id="LinegraphWrapper" [class]="activeMachine?.status">
+            <div id="LinegraphWrapper" [class]="statusName$ | async">
                 <i id="Menu" class="material-icons" (click)="toggleSidebar($event)">menu</i>
                 <line-graph></line-graph>
             </div>
-            <div id="CommentBar" class="{{activeMachine?.status}}-dark"></div>
+            <div id="CommentBar" class="{{statusName$ | async}}-dark"></div>
             <div id="DashboardFlex">
             
-                <div class="card small"><p class="title">Availability:</p><p class="percent-metric">{{activeMachine?.availability | percent}}</p></div>
-                <div class="card small"><p class="title">Quality:</p><p class="percent-metric">{{activeMachine?.quality | percent}}</p></div>
-                <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine?.performance | percent}}</p></div>
-                <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine?.oee | percent}}</p></div>
+                <div class="card small"><p class="title">Availability:</p><p class="percent-metric">{{availability$ | async | percent:'1.0-0'}}</p></div>
+                <div class="card small"><p class="title">Quality:</p><p class="percent-metric">{{quality$ | async | percent:'1.0-0'}}</p></div>
+                <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{performance$ | async | percent:'1.0-0'}}</p></div>
+                <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{oee$ | async | percent:'1.0-0'}}</p></div>
                 
-                <div class="card medium center-text"><doughnut-graph title="Status Breakdown"[data]="statusData"></doughnut-graph></div>
+                <div class="card medium center-text"><doughnut-graph title="Status Breakdown"[data]="doughnutGraphData$ | async"></doughnut-graph></div>
                 <div class="card medium center-text"><bar-graph></bar-graph></div>
                 
             </div>
@@ -222,25 +223,77 @@ export class MyApp implements OnInit {
 
     /// All the machines
     machines:Array<Machine> = [];
+    
+    /// Contains a stream of all possible events.
+    changeStream = this.machineService.changes();
+    
+    /// Contains a stream of all status changes 
+    statusStream:Observable<number> = this.changeStream
+                                          .filter(item => item.hasOwnProperty('status'))
+                                          .map(item => item.status);
+    
+    /// A stream of the current status's name                               
+    statusName$:Observable<string> = this.statusStream
+                                         .map(item => Status[item]);
 
-    statusData:Array<PieModel> = [
-        {
-            label: "Online",
-            value: 10,
-            color: "#4CAF50"
-        },
-        {
-            label: "Offline",
-            value: 1,
-            color: "#F44336"
-        },
-        {
-            label: "Idle",
-            value: 2,
-            color: "#FFC107"
-        }
-    ];
+    /// A stream of goodparts
+    goodPartStream:Observable<number> = this.changeStream
+                                            .filter(item => item.hasOwnProperty('goodPartCount'))
+                                            .map(item => item.goodPartCount);
+    
+    /// A stream of cycles
+    cycleStream:Observable<number> = this.changeStream
+                                         .filter(item => item.hasOwnProperty('cycleCount'))
+                                         .map(item => item.cycleCount);
 
+    
+    /// A stream of rejected parts
+    rejectPartStream:Observable<number> = this.changeStream
+                                              .filter(item => item.hasOwnProperty('rejectPartCount'))
+                                              .map(item => item.rejectPartCount);
+
+    /// Will Tick the quality as it changes.  
+    quality$:Observable<number> = Observable
+                                    .combineLatest(this.goodPartStream, this.cycleStream)
+                                    .map(item => item[0] / item[1]);
+                                     
+    doughnutGraphData$:Observable<Array<PieModel>> =  Observable
+                                                        .combineLatest(this.statusStream, Observable.interval(1000))
+                                                        .map(item => item[0])
+                                                        .scan((prev:Array<PieModel>, curr) => {
+                                                            let index = prev.findIndex(item => (item.label === Status[curr]));
+                                                            let pieModel:PieModel = prev[index];
+                                                            return [
+                                                                ...prev.slice(0, index),
+                                                                Object.assign({}, pieModel, {value: pieModel.value+1}),
+                                                                ...prev.slice(index+1)
+                                                            ];
+                                                        }, [
+                                                            {
+                                                                label: "Online",
+                                                                value: 1,
+                                                                color: "#4CAF50"
+                                                            },
+                                                            {
+                                                                label: "Offline",
+                                                                value: 1,
+                                                                color: "#F44336"
+                                                            },
+                                                            {
+                                                                label: "Idle",
+                                                                value: 1,
+                                                                color: "#FFC107"
+                                                            }
+                                                        ]);
+                     
+    /// Will Tick the aviability as it changes.  
+    availability$:Observable<number> = this.doughnutGraphData$.map((item) => {
+        var plannedProductionTime = item.reduce((prev, curr) => prev + curr.value, 0);
+        var online = item.find(item => item.label === "Online");
+        return online.value / plannedProductionTime;
+    });
+
+   
     constructor(platform:Platform, public machineService:MachineService) {
         platform.ready().then(() => {
             StatusBar.styleDefault();
@@ -256,23 +309,6 @@ export class MyApp implements OnInit {
             return machines[0];
 
         }).then(activeMachine => {
-            let machineDataStream = this.machineService.changes();
-            let statusStream = machineDataStream.filter(item => item.hasOwnProperty('status'));
-
-            let statusAccumulator = Observable.combineLatest(statusStream, Observable.interval(1000))
-                                        .map(item => item[0].status);
-
-            statusAccumulator.subscribe(payload => {
-                activeMachine.status = Status[payload];
-                let index = that.statusData.findIndex(item => (item.label === Status[payload]));
-                let pieModel:PieModel = that.statusData[index];
-                pieModel.value ++;
-                that.statusData = [
-                    ...that.statusData.slice(0, index),
-                    pieModel,
-                    ...that.statusData.slice(index+1)
-                ];
-            });
         });
     }
 

@@ -32,9 +32,10 @@ export class MachineService {
         let goodPartCount = 0;
         let rejectPartCount = 0;
         setInterval(function(){
+            cycleCount++;
             this.machineStream.next({ cycleCount });
             let isGoodPart = Math.floor(Math.random() * 10) < 9; // 9 in 10 chance of a good part
-            let payload = isGoodPart ? {goodPartCount} : {rejectPartCount};
+            let payload = isGoodPart ? {goodPartCount: goodPartCount++} : {rejectPartCount: rejectPartCount++};
             this.machineStream.next(payload);
         }.bind(this), 100);
     }
