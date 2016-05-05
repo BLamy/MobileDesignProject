@@ -10,6 +10,9 @@
     },
     "lodash/lodash.d.ts": {
       "commit": "2d448c0a3152e8871521848c5c2c61ab4e2a2cc9"
+    },
+    "es6-shim/es6-shim.d.ts": {
+      "commit": "73f7bb99692823f1811817f9753a02b57af5305e"
     }
   }
 }

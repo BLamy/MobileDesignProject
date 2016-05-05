@@ -1,7 +1,10 @@
 /**
  * Created by brett on 5/1/16.
  */
-import {Component, ViewEncapsulation, ElementRef, OnInit, Input, SimpleChange, OnChanges} from "angular2/core";
+import {
+    Component, ViewEncapsulation, ElementRef, OnInit, Input, SimpleChange, OnChanges,
+    ViewChild, AfterViewInit
+} from "angular2/core";
 import * as d3 from 'd3'
 import {PieModel} from "../typings/PieModel";
 
@@ -14,8 +17,13 @@ import {PieModel} from "../typings/PieModel";
           position: relative;
         }
         doughnut-graph svg {
-          width: 960px;
-          height: 500px;
+          width: 450px;
+          height: 450px;
+        }
+        
+        doughnut-graph p {
+          font-weight: bold;
+          font-size: 18px;
         }
         
         doughnut-graph path.slice{
@@ -28,10 +36,37 @@ import {PieModel} from "../typings/PieModel";
             stroke-width: 2px;
             fill: none;
         }
+        
+        doughnut-graph .flex {
+            display: flex;
+        }
+        
+        doughnut-graph .full {
+            width: 100%;
+        }
+        
+        doughnut-graph .box {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin: 0 10px;
+            border-radius: 100%;
+        }
     `],
-    template: ``
+    template: `
+        <p>{{title}}</p>
+        <svg #graph></svg>
+        <div class="flex">
+            <div class="full"></div>
+            <div *ngFor="#model of data" class="flex">
+                <span class="box" [style.backgroundColor]="model.color"></span><span class="box-name">{{model.label}}</span>
+            </div>
+            <div class="full"></div>
+        </div>
+    `
 })
-export class DoughnutGraphComponent implements OnChanges {
+export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
+    @ViewChild('graph') graph;
 
     /// The dom target
     target: any;
@@ -47,6 +82,9 @@ export class DoughnutGraphComponent implements OnChanges {
     
     @Input()
     data: Array<PieModel> = [];
+
+    @Input()
+    title: string;
 
     /// The radius of the graph
     get radius():number {
@@ -74,10 +112,13 @@ export class DoughnutGraphComponent implements OnChanges {
     arc = d3.svg.arc().outerRadius(this.radius * 0.8).innerRadius(this.radius * 0.4);
 
     constructor(elementRef: ElementRef) {
-        this.target = elementRef.nativeElement;
+        // this.target = elementRef.nativeElement;
+    }
+
+    ngAfterViewInit():any {
         const { width, height } = this;
 
-        let svg = d3.select(this.target).append("svg").append("g");svg.append("g").attr("class", "slices");
+        let svg = d3.select(this.graph.nativeElement).append("svg").append("g");svg.append("g").attr("class", "slices");
         svg.append("g").attr("class", "labels");
         svg.append("g").attr("class", "lines");
         svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
@@ -86,8 +127,10 @@ export class DoughnutGraphComponent implements OnChanges {
     }
 
     ngOnChanges(changes: {[propName: string]: SimpleChange}) {
-        let { data } = changes;
-        this.change(data.currentValue);
+        if (this.graph) {
+            let { data } = changes;
+            this.change(data.currentValue);
+        }
     }
 
     change(data) {
