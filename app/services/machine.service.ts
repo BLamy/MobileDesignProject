@@ -17,8 +17,8 @@ export class MachineService {
     public cycleTime: number = 100;
     constructor(){
         this.machineStream = new BehaviorSubject('');
+        
         let status: Status = Status.Idle;
-        // Observable.interval(1000 * 10).startWith({status: Status.Offline}).map(x =>  Math.floor(Math.random() * 3) + 1 as Status);
         // status interval
         let faultCount = 0;
         setInterval(function(){
@@ -54,10 +54,6 @@ export class MachineService {
         return Promise.resolve(MACHINES);
     }
 
-
-    // statusStream():BehaviorSubject<Status> {
-    //
-    // }
     changes():BehaviorSubject<any> {
         return this.machineStream;
     }

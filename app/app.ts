@@ -193,7 +193,7 @@ import {Observable} from "rxjs/Observable";
         <app-content [class.open]="isSidebarOpen">
             <div id="LinegraphWrapper" [class]="statusName$ | async">
                 <i id="Menu" class="material-icons" (click)="toggleSidebar($event)">menu</i>
-                <line-graph></line-graph>
+                <line-graph [cursor]="oee$ | async"></line-graph>
             </div>
             <div id="CommentBar" class="{{statusName$ | async}}-dark"></div>
             <div id="DashboardFlex">
@@ -203,7 +203,7 @@ import {Observable} from "rxjs/Observable";
                 <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{performance$ | async | percent:'1.0-0'}}</p></div>
                 <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{oee$ | async | percent:'1.0-0'}}</p></div>
                 
-                <div class="card medium center-text"><doughnut-graph title="Status Breakdown"[data]="doughnutGraphData$ | async"></doughnut-graph></div>
+                <div class="card medium center-text"><doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph></div>
                 <div class="card medium center-text"><bar-graph></bar-graph></div>
                 
             </div>

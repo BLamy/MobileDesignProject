@@ -2,7 +2,7 @@
  * Created by brett on 4/30/16.
  */
 
-import {Component, ViewEncapsulation, OnInit, Attribute, ElementRef} from "angular2/core";
+import {Component, ViewEncapsulation, OnInit, Attribute, ElementRef, Input} from "angular2/core";
 import * as d3 from 'd3';
 
 @Component({
@@ -34,6 +34,8 @@ export class LineGraphComponent implements OnInit {
     // target element or selector to contain the svg
     target:any;
 
+    @Input() cursor: number = 0;
+
     constructor(elementRef:ElementRef,
                 @Attribute('width') width:string,
                 @Attribute('height') height:string) {
@@ -42,11 +44,11 @@ export class LineGraphComponent implements OnInit {
     }
 
     init() {
-        let {target} = this;
+        let {target, cursor} = this;
 
         let n = 243,
             duration = 750,
-            now = new Date(Date.now() - duration) as any,
+            now = new Date(Date.now() - duration),
             count = 0,
             scrollData = d3.range(n).map(_ => 0);
 
@@ -63,7 +65,7 @@ export class LineGraphComponent implements OnInit {
 
         const line = d3.svg.line()
             .interpolate("basis")
-            .x((d, i) => x(now - (n - 1 - i) * duration))
+            .x((d, i) => x(now - (n - 1 - i) * duration) )
             .y((d, i) => y(d));
 
         const svg = d3.select(target).append("p").append("svg")
@@ -97,6 +99,7 @@ export class LineGraphComponent implements OnInit {
         d3.select(window)
             .on("scroll", () => ++count);
 
+        let that = this;
         (function tick() {
             transition = transition.each(() => {
                 // update the domains
@@ -105,7 +108,7 @@ export class LineGraphComponent implements OnInit {
                 y.domain([0, d3.max(scrollData)]);
 
                 // push the accumulated count onto the back, and reset the count
-                scrollData.push(Math.min(30, Math.floor(Math.random() * 100)));
+                scrollData.push(that.cursor);
                 count = 0;
 
                 // redraw the line
