@@ -46,7 +46,7 @@ export class LineGraphComponent implements OnInit {
     init() {
         let {target, cursor} = this;
 
-        let n = 243,
+        let n = 543,
             duration = 750,
             now = new Date(Date.now() - duration),
             count = 0,
@@ -93,7 +93,7 @@ export class LineGraphComponent implements OnInit {
             .attr("class", "line");
 
         let transition = d3.select({} as any).transition()
-            .duration(750)
+            .duration(duration)
             .ease("linear");
 
         d3.select(window)
