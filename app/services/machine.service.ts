@@ -13,31 +13,41 @@ import {Status} from "../typings/Status";
 export class MachineService {
     // statusStream:Observable< = Observable.interval(1000 * 30);
 
-    machineStream:BehaviorSubject<any> = new BehaviorSubject('');x
-
-
+    machineStream:BehaviorSubject<any> = new BehaviorSubject('');
+    public cycleTime: number = 100;
     constructor(){
         this.machineStream = new BehaviorSubject('');
-
+        let status: Status = Status.Idle;
         // Observable.interval(1000 * 10).startWith({status: Status.Offline}).map(x =>  Math.floor(Math.random() * 3) + 1 as Status);
         // status interval
+        let faultCount = 0;
         setInterval(function(){
-            let status:Status = Math.floor(Math.random() * 3) + 1 as Status;
+            let randomNumber = Math.random() * 100;
+            if (randomNumber < 85) {
+               status = Status.Online;
+            } else if (randomNumber < 95) {
+               status = Status.Offline;
+               this.machineStream.next({fault: faultCount++});
+            } else {
+               status = Status.Idle;
+            }
             this.machineStream.next({status});
         }.bind(this), 1000 * 10);
-        this.machineStream.next({status: Status.Idle});
+            this.machineStream.next({status});
 
         // Cycle interval
         let cycleCount = 0;
         let goodPartCount = 0;
         let rejectPartCount = 0;
+        const idealRunRate = .90;
         setInterval(function(){
-            cycleCount++;
-            this.machineStream.next({ cycleCount });
-            let isGoodPart = Math.floor(Math.random() * 10) < 9; // 9 in 10 chance of a good part
-            let payload = isGoodPart ? {goodPartCount: goodPartCount++} : {rejectPartCount: rejectPartCount++};
+            if (status !== Status.Online) return;
+            
+            this.machineStream.next({ cycle: cycleCount++ });
+            const isGoodPart = Math.random() < idealRunRate; // 9 in 10 chance of a good part
+            const payload = isGoodPart ? {goodPart: goodPartCount++} : {rejectPart: rejectPartCount++};
             this.machineStream.next(payload);
-        }.bind(this), 100);
+        }.bind(this), this.cycleTime);
     }
 
     getMachines():Promise<any> {

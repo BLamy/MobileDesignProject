@@ -228,9 +228,10 @@ export class MyApp implements OnInit {
     changeStream = this.machineService.changes();
     
     /// Contains a stream of all status changes 
-    statusStream:Observable<number> = this.changeStream
+    statusStream:Observable<Status> = this.changeStream
                                           .filter(item => item.hasOwnProperty('status'))
-                                          .map(item => item.status);
+                                          .map(item => item.status)
+                                          .startWith(Status.Idle);
     
     /// A stream of the current status's name                               
     statusName$:Observable<string> = this.statusStream
@@ -238,25 +239,29 @@ export class MyApp implements OnInit {
 
     /// A stream of goodparts
     goodPartStream:Observable<number> = this.changeStream
-                                            .filter(item => item.hasOwnProperty('goodPartCount'))
-                                            .map(item => item.goodPartCount);
+                                            .filter(item => item.hasOwnProperty('goodPart'))
+                                            .map(item => item.goodPart)
+                                            .startWith(1);
     
     /// A stream of cycles
     cycleStream:Observable<number> = this.changeStream
-                                         .filter(item => item.hasOwnProperty('cycleCount'))
-                                         .map(item => item.cycleCount);
+                                         .filter(item => item.hasOwnProperty('cycle'))
+                                         .map(item => item.cycle)
+                                         .startWith(1);
+;
 
     
     /// A stream of rejected parts
     rejectPartStream:Observable<number> = this.changeStream
-                                              .filter(item => item.hasOwnProperty('rejectPartCount'))
-                                              .map(item => item.rejectPartCount);
+                                              .filter(item => item.hasOwnProperty('rejectPart'))
+                                              .map(item => item.rejectPart)
+                                              .startWith(1);
+;
 
-    /// Will Tick the quality as it changes.  
-    quality$:Observable<number> = Observable
-                                    .combineLatest(this.goodPartStream, this.cycleStream)
-                                    .map(item => item[0] / item[1]);
-                                     
+      
+    //  Will output a stream of data for updating the piegraph. 
+    // TODO: make this a little less ugly   
+    // TODO: Split into status Acc & doughnutGraph color map
     doughnutGraphData$:Observable<Array<PieModel>> =  Observable
                                                         .combineLatest(this.statusStream, Observable.interval(1000))
                                                         .map(item => item[0])
@@ -286,14 +291,45 @@ export class MyApp implements OnInit {
                                                             }
                                                         ]);
                      
+   
+   
+   
+    // Calculations taken from: http://www.oee.com/calculating-oee.html
     /// Will Tick the aviability as it changes.  
     availability$:Observable<number> = this.doughnutGraphData$.map((item) => {
-        var plannedProductionTime = item.reduce((prev, curr) => prev + curr.value, 0);
-        var online = item.find(item => item.label === "Online");
-        return online.value / plannedProductionTime;
+        const plannedProductionTime = item.reduce((prev, curr) => prev + curr.value, 0);
+        const runtime = item.find(item => item.label === "Online").value;
+        return runtime / plannedProductionTime;
     });
+    
+    /// Will Tick the performance as it changes.  
+    performance$:Observable<number> = Observable
+                                    .combineLatest(this.cycleStream, this.doughnutGraphData$)
+                                    .map(item => {
+                                        const [cycleCount, statusAcc] = item;
+                                        const runtime = statusAcc.find(item => item.label === "Online").value;
+                                        const idealCycleTime = this.machineService.cycleTime / 1000;
+                                        return (idealCycleTime * cycleCount) / runtime; /* the machine should make 600 parts per minute */;
+                                    });
+    
+       /// Will Tick the quality as it changes.  
+    quality$:Observable<number> = Observable
+                                    .combineLatest(this.goodPartStream, this.cycleStream)
+                                    .map(item => {
+                                        const [goodPartCount, cycleCount] = item;
+                                        return (goodPartCount / cycleCount) || 0
+                                    });
 
-   
+    /// Will Tick the oee as it changes.  
+    oee$:Observable<number> = Observable
+                                    .combineLatest(this.availability$, this.performance$, this.quality$)
+                                    .map(item => {
+                                        const [aviability, performance, quality] = item;
+                                        return aviability * performance * quality || 0
+                                    });
+
+
+
     constructor(platform:Platform, public machineService:MachineService) {
         platform.ready().then(() => {
             StatusBar.styleDefault();
@@ -301,15 +337,14 @@ export class MyApp implements OnInit {
     }
 
     ngOnInit():any {
-        let that = this;
+        const that = this;
 
         this.machineService.getMachines().then(machines => {
             this.machines = machines;
             this.activeMachine = machines[0];
             return machines[0];
 
-        }).then(activeMachine => {
-        });
+        })
     }
 
     toggleSidebar() {
