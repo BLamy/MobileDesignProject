@@ -83,6 +83,7 @@ import {Observable} from "rxjs/Observable";
         margin: 10px;
         padding: 20px;
         width: calc(100% / 4 - 20px);
+        min-height: 80px;
         }
         
         .card.medium {
@@ -91,7 +92,7 @@ import {Observable} from "rxjs/Observable";
         width: calc(100% / 2 - 20px);
         }
         
-        .card.large {33
+        .card.large {
         margin: 20px;
         padding: 20px;
         width: 100%;
@@ -127,16 +128,27 @@ import {Observable} from "rxjs/Observable";
         }
 
         .percent-metric {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 28px;
-        text-align: center;
+            position: absolute;
+            margin: 0;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 28px;
+            text-align: center;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .card.small>i {
+            position: absolute;
+            top: 40%;
+            opacity: .71;
         }
         
         .card.small>.title {
-        margin: 0;
-        opacity: .71;
+            margin: 0;
+            position: absolute;
+            opacity: .71;
+            top: 10px;
         }
         
         ul {
@@ -212,13 +224,33 @@ import {Observable} from "rxjs/Observable";
             <div id="CommentBar" class="{{activeMachine.statusName$ | async}}-dark"></div>
             <div id="DashboardFlex">
             
-                <div class="card small"><p class="title">Availability:</p><p class="percent-metric">{{activeMachine.availability$ | async | percent:'1.0-0'}}</p></div>
-                <div class="card small"><p class="title">Quality:</p><p class="percent-metric">{{activeMachine.quality$ | async | percent:'1.0-0'}}</p></div>
-                <div class="card small"><p class="title">Performance:</p><p class="percent-metric">{{activeMachine.performance$ | async | percent:'1.0-0'}}</p></div>
-                <div class="card small"><p class="title">OEE:</p><p class="percent-metric">{{activeMachine.oee$ | async | percent:'1.0-0'}}</p></div>
+                <div class="card small">
+                    <i class="material-icons">timer</i>
+                    <p class="title">Availability</p>
+                    <p class="percent-metric">{{activeMachine.availability$ | async | percent:'1.0-0'}}</p>
+                </div>
+                <div class="card small">
+                    <i class="material-icons">assignment_turned_in</i>
+                    <p class="title">Quality</p>
+                    <p class="percent-metric">{{activeMachine.quality$ | async | percent:'1.0-0'}}</p>
+                </div>
+                <div class="card small">
+                    <i class="material-icons">trending_up</i>
+                    <p class="title">Performance</p>
+                    <p class="percent-metric">{{activeMachine.performance$ | async | percent:'1.0-0'}}</p>
+                </div>
+                <div class="card small">
+                    <i class="material-icons">assessment</i>
+                    <p class="title">OEE</p>
+                    <p class="percent-metric">{{activeMachine.oee$ | async | percent:'1.0-0'}}</p>
+                </div>
                 
-                <div class="card medium center-text"><doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph></div>
-                <div class="card medium center-text"><bar-graph></bar-graph></div>
+                <div class="card medium center-text">
+                    <doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph>
+                </div>
+                <div class="card medium center-text">
+                    <bar-graph></bar-graph>
+                </div>
                 
             </div>
         </app-content>
