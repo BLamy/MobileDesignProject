@@ -108,9 +108,22 @@ import {Observable} from "rxjs/Observable";
         }
         
         #Menu {
-        padding: 15px;
-        z-index: 2;
-        position: absolute;
+            padding: 15px;
+            z-index: 2;
+            position: absolute;
+            color: white;
+        }
+        
+        p#PageTitle {
+            margin: 0;
+            padding: 0;
+            z-index: 2;
+            margin-left: 53px;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 53px;
+            position: absolute;
+            color: white;
         }
 
         .percent-metric {
@@ -176,7 +189,7 @@ import {Observable} from "rxjs/Observable";
         .center-text {
         text-align:center
         }
-
+        
   `],
     template: `
     <app-scaffold>
@@ -185,7 +198,7 @@ import {Observable} from "rxjs/Observable";
                 <span class="avatar">BL</span><span class="username">Brett Lamy</span>
             </div>
             <ul>
-                <li *ngFor="#machine of machines" (click)="changeActiveMachine(machine)" class="{{machine.status}}-border">
+                <li *ngFor="#machine of machines$ | async" (click)="changeActiveMachine(machine)" class="{{machine.status}}-border">
                     {{machine.name}}
                 </li>
             </ul>
@@ -193,6 +206,7 @@ import {Observable} from "rxjs/Observable";
         <app-content [class.open]="isSidebarOpen">
             <div id="LinegraphWrapper" [class]="activeMachine.statusName$ | async">
                 <i id="Menu" class="material-icons" (click)="toggleSidebar($event)">menu</i>
+                <p id="PageTitle">{{ activeMachine.name }}</p>
                 <line-graph [cursor]="activeMachine.oee$ | async"></line-graph>
             </div>
             <div id="CommentBar" class="{{activeMachine.statusName$ | async}}-dark"></div>
@@ -213,19 +227,19 @@ import {Observable} from "rxjs/Observable";
 
     config: {} // http://ionicframework.com/docs/v2/api/config/Config/
 })
-export class MyApp implements OnInit {
+export class MyApp {
 
     /// Setting this variable will toggle the sidebar on mobile/tablets. Sidebar is always open on desktop.
     isSidebarOpen:boolean = false;
 
     /// All the machines
-    machines:Array<Machine> = [];
+    machines$:Promise<Machine> = this.machineService.getMachines();
     
     /// Contains a stream of all possible events.
     changeStream = this.machineService.changes();
 
     /// THe currently active machine
-    activeMachine: Machine = new Machine(this.changeStream, this.machineService.cycleTime/1000);
+    activeMachine: Machine = new Machine("Machine 1", this.changeStream, this.machineService.cycleTime/1000);
     
     /// The reduction of data for the DoughnutGraphComponent
     doughnutGraphData$:Observable<Array<PieModel>> = this.activeMachine.accumulatedStatusTime$.map(breakdown => {
@@ -244,17 +258,12 @@ export class MyApp implements OnInit {
         });
     }
 
-    ngOnInit():any {
-        this.machineService.getMachines().then(machines => {
-            this.machines = machines;
-        });
-    }
-
     toggleSidebar() {
         this.isSidebarOpen = !this.isSidebarOpen;
     }
 
     changeActiveMachine(machine: Machine) {
-        this.activeMachine = machine;
+        // TODO: Implement Multiple machines
+        // this.activeMachine = machine;
     }
 }

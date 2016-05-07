@@ -61,7 +61,7 @@ export class Machine {
     /**
      *
      */
-    constructor(stream: Observable<MachineStream>, idealCycleTime: number) {
+    constructor(public name: string, stream: Observable<MachineStream>, idealCycleTime: number) {
         //---------------------------------
         // Part streams
         this.cycleCount$ = stream.filter(item => 'cycle' in item).pluck('cycle').startWith(1);
