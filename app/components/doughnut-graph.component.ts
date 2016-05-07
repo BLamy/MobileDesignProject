@@ -55,7 +55,7 @@ import {PieModel} from "../typings/PieModel";
     `],
     template: `
         <p>{{title}}</p>
-        <svg #graph></svg>
+        <svg #target></svg>
         <div class="flex">
             <div class="full"></div>
             <div *ngFor="#model of data" class="flex">
@@ -66,25 +66,23 @@ import {PieModel} from "../typings/PieModel";
     `
 })
 export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
-    @ViewChild('graph') graph;
+    /// The d3 target
+    @ViewChild('target') target;
 
-    /// The dom target
-    target: any;
+    /// Data property setting this property will update the doughnut graph
+    @Input() data: Array<PieModel> = [];
 
-    /// The root D3 object
-    svg: any;
+    /// THe title of the graph 
+    @Input() title: string;
 
     /// The width of the graph
-    width = 450;
+    @Input() width: number = 450;
 
     /// The height of the graph
-    height = 450;
+    @Input()  height: number = 450;
     
-    @Input()
-    data: Array<PieModel> = [];
-
-    @Input()
-    title: string;
+    /// The root D3 object
+    graph: d3.Selection<PieModel>;
 
     /// The radius of the graph
     get radius():number {
@@ -106,38 +104,39 @@ export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
         return d3.scale.ordinal().domain(this.domain).range(this.range);
     }
 
-
-    pie = d3.layout.pie().sort(null).value(d => (d as any).value);
-    outerArc = d3.svg.arc().innerRadius(this.radius * 0.9).outerRadius(this.radius * 0.9);
-    arc = d3.svg.arc().outerRadius(this.radius * 0.8).innerRadius(this.radius * 0.4);
-
-    constructor(elementRef: ElementRef) {
-        // this.target = elementRef.nativeElement;
-    }
+    // Pie graph scallar
+    pie: d3.layout.Pie<PieModel> = d3.layout.pie<PieModel>().sort(null).value(d => d.value);
+    
+    // inner arc
+    arc: d3.svg.Arc<d3.svg.arc.Arc> = d3.svg.arc().outerRadius(this.radius * 0.8).innerRadius(this.radius * 0.4);
+    
+    // outer  arc
+    outerArc: d3.svg.Arc<d3.svg.arc.Arc> = d3.svg.arc().innerRadius(this.radius * 0.9).outerRadius(this.radius * 0.9);
 
     ngAfterViewInit():any {
         const { width, height } = this;
 
-        let svg = d3.select(this.graph.nativeElement).append("svg").append("g");svg.append("g").attr("class", "slices");
-        svg.append("g").attr("class", "labels");
-        svg.append("g").attr("class", "lines");
-        svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        const graph = d3.select(this.target.nativeElement).append("g");
+        graph.append("g").attr("class", "slices");
+        graph.append("g").attr("class", "labels");
+        graph.append("g").attr("class", "lines");
+        graph.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-        this.svg = svg;
+        this.graph = graph;
     }
 
     ngOnChanges(changes: {[propName: string]: SimpleChange}) {
-        if (this.graph) {
-            let { data } = changes;
+        const { data } = changes;
+        if (this.target && data) {
             this.change(data.currentValue);
         }
     }
 
     change(data) {
-        const {svg, pie, colorScale, arc} = this;
+        const {graph, pie, colorScale, arc} = this;
 
         /* ------- PIE SLICES -------*/
-        let slice = svg.select(".slices")
+        const slice = graph.select(".slices")
             .selectAll("path.slice")
             .data(pie(data), d => d.data.label);
 
@@ -149,8 +148,9 @@ export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
         slice
             .transition().duration(1000)
             .attrTween("d", function(d) {
+                // this = d3 animation;
                 this._current = this._current || d;
-                let interpolate = d3.interpolate(this._current, d);
+                const interpolate = d3.interpolate(this._current, d as any);
                 this._current = interpolate(0);
                 return t => arc(interpolate(t) as any);
             });
