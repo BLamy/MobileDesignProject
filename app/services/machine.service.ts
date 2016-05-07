@@ -33,7 +33,7 @@ export class MachineService {
             }
             this.machineStream.next({status});
         }.bind(this), 1000 * 10);
-            this.machineStream.next({status});
+        this.machineStream.next({status});
 
         // Cycle interval
         let cycleCount = 0;

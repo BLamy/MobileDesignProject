@@ -215,7 +215,7 @@ import {Observable} from "rxjs/Observable";
 })
 export class MyApp implements OnInit {
 
-    /// Setting this variable will toggle the sidebar on mobile/tablets.
+    /// Setting this variable will toggle the sidebar on mobile/tablets. Sidebar is always open on desktop.
     isSidebarOpen:boolean = false;
 
     /// All the machines
@@ -224,8 +224,10 @@ export class MyApp implements OnInit {
     /// Contains a stream of all possible events.
     changeStream = this.machineService.changes();
 
-    activeMachine: Machine = new Machine(this.machineService.cycleTime, this.changeStream);
+    /// THe currently active machine
+    activeMachine: Machine = new Machine(this.changeStream, this.machineService.cycleTime/1000);
     
+    /// The reduction of data for the DoughnutGraphComponent
     doughnutGraphData$:Observable<Array<PieModel>> = this.activeMachine.accumulatedStatusTime$.map(breakdown => {
         return breakdown.reduce((prev, curr) => {
             return prev.concat({
@@ -235,8 +237,7 @@ export class MyApp implements OnInit {
             });
         }, [] as Array<PieModel>);
     });
-
-
+                                                          
     constructor(platform:Platform, public machineService:MachineService) {
         platform.ready().then(() => {
             StatusBar.styleDefault();
@@ -244,18 +245,16 @@ export class MyApp implements OnInit {
     }
 
     ngOnInit():any {
-        const that = this;
-
         this.machineService.getMachines().then(machines => {
             this.machines = machines;
-        })
+        });
     }
 
     toggleSidebar() {
         this.isSidebarOpen = !this.isSidebarOpen;
     }
 
-    changeActiveMachine(machine) {
+    changeActiveMachine(machine: Machine) {
         this.activeMachine = machine;
     }
 }

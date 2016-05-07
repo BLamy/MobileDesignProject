@@ -1,6 +1,14 @@
 import {Status} from "../typings/Status";
 import {StatusBreakdown} from "../typings/StatusBreakdown";
 import {Observable} from 'rxjs'
+export interface MachineStream {
+    cycle?: number;
+    fault?: number;
+    goodPart?: number;
+    rejectPart?: number;
+    status?: Status;
+}
+
 const initialStatusData:Array<StatusBreakdown> = [{
         status: Status.Online,
         time: 1,
@@ -17,15 +25,6 @@ const initialStatusData:Array<StatusBreakdown> = [{
         color: "#FFC107"
     }];
 export class Machine {
-    /// Contains a stream of all status changes 
-    status$: Observable<Status>;
-
-    /// A stream of the current status's name                               
-    statusName$: Observable<string>;
-
-    /// A stream of accumulated time (in seconds) spent in each status
-    accumulatedStatusTime$: Observable<Array<StatusBreakdown>>;
-
     /// A stream of cycles
     cycleCount$: Observable<number>;
 
@@ -37,6 +36,15 @@ export class Machine {
 
     /// A stream of good parts
     rejectPartCount$: Observable<number>;
+
+    /// Contains a stream of all status changes 
+    status$: Observable<Status>;
+
+    /// A stream of the current status's name                               
+    statusName$: Observable<string>;
+
+    /// A stream of accumulated time (in seconds) spent in each status
+    accumulatedStatusTime$: Observable<Array<StatusBreakdown>>;
 
     /// Will Tick the aviability as it changes.  
     availability$: Observable<number>;
@@ -53,11 +61,21 @@ export class Machine {
     /**
      *
      */
-    constructor(cycleTime: number, stream: Observable<any>) {
-        this.status$ = stream.filter(item => item.hasOwnProperty('status'))
-            .map(item => item.status)
-            .startWith(Status.Idle);
+    constructor(stream: Observable<MachineStream>, idealCycleTime: number) {
+        //---------------------------------
+        // Part streams
+        this.cycleCount$ = stream.filter(item => 'cycle' in item).pluck('cycle').startWith(1);
+        
+        this.faultCount$ = stream.filter(item => 'fault' in item).pluck('fault').startWith(1);
+        
+        this.goodPartCount$ = stream.filter(item => 'goodPart' in item).pluck('goodPart').startWith(1);
+        
+        this.rejectPartCount$ = stream.filter(item => 'rejectPart' in  item).pluck('rejectPart').startWith(1);
 
+        //---------------------------------
+        // Status 
+        this.status$ = stream.filter(item => 'status' in item).pluck('status').startWith(Status.Idle);
+        
         this.statusName$ = this.status$.map(item => Status[item]);
         
         this.accumulatedStatusTime$ = Observable
@@ -73,29 +91,13 @@ export class Machine {
                 ];
             }, initialStatusData);
 
-        this.cycleCount$ = stream.filter(item => item.hasOwnProperty('cycle'))
-            .map(item => item.cycle)
-            .startWith(1);
-
-        this.faultCount$ = stream.filter(item => item.hasOwnProperty('fault'))
-            .map(item => item.fault)
-            .startWith(1);
-
-        this.goodPartCount$ = stream.filter(item => item.hasOwnProperty('goodPart'))
-            .map(item => item.goodPart)
-            .startWith(1);
-
-        this.rejectPartCount$ = stream.filter(item => item.hasOwnProperty('rejectPart'))
-            .map(item => item.rejectParStatusBreakdownt)
-            .startWith(1);
-
-
+        //---------------------------------
+        // Computed Properties
         // Calculations taken from: http://www.oee.com/calculating-oee.html
-
         this.availability$ = this.accumulatedStatusTime$.map((item) => {
             const plannedProductionTime = item.reduce((prev, curr) => prev + curr.time, 0);
             const runtime = item.find(item => item.status === Status.Online).time;
-            return runtime / plannedProductionTime;
+            return runtime / plannedProductionTime || 0;
         });
 
         this.performance$ = Observable
@@ -103,22 +105,21 @@ export class Machine {
             .map(item => {
                 const [cycleCount, statusAcc] = item;
                 const runtime = statusAcc.find(item => item.status === Status.Online).time;
-                const idealCycleTime = cycleTime / 1000;
-                return (idealCycleTime * cycleCount) / runtime; /* the machine should make 600 parts per minute */;
+                return (idealCycleTime * cycleCount) / runtime || 0;
             });
 
         this.quality$ = Observable
             .combineLatest(this.goodPartCount$, this.cycleCount$)
             .map(item => {
                 const [goodPartCount, cycleCount] = item;
-                return (goodPartCount / cycleCount) || 0
+                return (goodPartCount / cycleCount) || 0;
             });
 
         this.oee$ = Observable
             .combineLatest(this.availability$, this.performance$, this.quality$)
             .map(item => {
                 const [aviability, performance, quality] = item;
-                return aviability * performance * quality || 0
+                return aviability * performance * quality || 0;
             });
     }
 }
