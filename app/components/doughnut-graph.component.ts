@@ -72,7 +72,7 @@ export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
     /// Data property setting this property will update the doughnut graph
     @Input() data: Array<PieModel> = [];
 
-    /// THe title of the graph 
+    /// The title of the graph 
     @Input() title: string;
 
     /// The width of the graph
@@ -83,7 +83,7 @@ export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
     
     /// The root D3 object
     graph: d3.Selection<PieModel>;
-
+    
     /// The radius of the graph
     get radius():number {
         return Math.min(this.width, this.height) / 2;
@@ -114,9 +114,9 @@ export class DoughnutGraphComponent implements AfterViewInit, OnChanges {
     outerArc: d3.svg.Arc<d3.svg.arc.Arc> = d3.svg.arc().innerRadius(this.radius * 0.9).outerRadius(this.radius * 0.9);
 
     ngAfterViewInit():any {
-        const { width, height } = this;
+        const { target, width, height } = this;
 
-        const graph = d3.select(this.target.nativeElement).append("g");
+        const graph = d3.select(target.nativeElement).append("g");
         graph.append("g").attr("class", "slices");
         graph.append("g").attr("class", "labels");
         graph.append("g").attr("class", "lines");

@@ -4,12 +4,12 @@ A simple analytics dashboard example written using the ionic 2 beta.
 This is a final project done for ISTE 252. 
 
 It features an Angular 2 implemenation of my NMDE 111 project. 
-
+- [x] Make bar graph reactive
+- [ ] Cleanup bar graph code
 - [ ] Add title to bar graph
-- [ ] Make bar graph reactive
-- [ ] Add Y - axis to bar graph
-- [ ] Add x- axis dates to bar graph
-- [ ] Make Bar graph hoverable
+- [x] Add Y - axis to bar graph
+- [x] Add x- axis dates to bar graph
+- [x] Make Bar graph hoverable
 
 - [ ] Each machine gets it's stream.
 - [ ] Each machine get's it's own dashboard

@@ -6,6 +6,7 @@ import {MachineService} from "./services/machine.service";
 import {Machine} from "./typings/Machine";
 import {AppScaffoldComponent, AppContentComponent, AppSidebarComponent} from "./components/app-scaffold.component";
 import {BarGraphComponent} from "./components/bar-graph.component";
+import {BarChartComponent} from "./components/bar-chart.component";
 import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
@@ -22,6 +23,7 @@ import {Observable} from "rxjs/Observable";
         AppContentComponent,
         AppSidebarComponent,
         BarGraphComponent,
+        BarChartComponent,
         LineGraphComponent,
         DoughnutGraphComponent
     ],
@@ -250,7 +252,7 @@ import {Observable} from "rxjs/Observable";
                     <doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph>
                 </div>
                 <div class="card medium center-text">
-                    <bar-graph [dataset]="barGraphData$ | async"></bar-graph>
+                    <bar-graph [data]="barGraphData$ | async"></bar-graph>
                 </div>
                 
             </div>
@@ -289,12 +291,12 @@ export class MyApp {
         .combineLatest(this.activeMachine.faultLog$, Observable.interval(1000))
         .map(item => {
             const [faults] = item;
-            return faults.slice(0, 10)
+            return faults.slice(-10);
         }).map(faults => {
             return faults.map(fault => {
                  return {
-                    key: fault.startTime,
-                    value: fault.duration
+                    letter: fault.startTime.toTimeString().split(' ')[0],// formats to HH:MM:ss
+                    frequency: fault.duration / 1000
                 };
             })
         }).startWith([]);
@@ -304,10 +306,6 @@ export class MyApp {
         platform.ready().then(() => {
             StatusBar.styleDefault();
         });
-        
-        this.barGraphData$.subscribe(payload => {
-            console.log(JSON.stringify(payload))
-        })
     }
 
     toggleSidebar() {
