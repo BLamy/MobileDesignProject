@@ -11,6 +11,7 @@ import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
 import {Status} from "./typings/Status";
 import {PieModel} from "./typings/PieModel";
+import {Fault} from "./typings/Fault";
 import {Observable} from "rxjs/Observable";
 
 @App({
@@ -249,7 +250,7 @@ import {Observable} from "rxjs/Observable";
                     <doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph>
                 </div>
                 <div class="card medium center-text">
-                    <bar-graph></bar-graph>
+                    <bar-graph [dataset]="barGraphData$ | async"></bar-graph>
                 </div>
                 
             </div>
@@ -283,11 +284,30 @@ export class MyApp {
             });
         }, [] as Array<PieModel>);
     });
+    
+    barGraphData$ = Observable
+        .combineLatest(this.activeMachine.faultLog$, Observable.interval(1000))
+        .map(item => {
+            const [faults] = item;
+            return faults.slice(0, 10)
+        }).map(faults => {
+            return faults.map(fault => {
+                 return {
+                    key: fault.startTime,
+                    value: fault.duration
+                };
+            })
+        }).startWith([]);
+
                                                           
     constructor(platform:Platform, public machineService:MachineService) {
         platform.ready().then(() => {
             StatusBar.styleDefault();
         });
+        
+        this.barGraphData$.subscribe(payload => {
+            console.log(JSON.stringify(payload))
+        })
     }
 
     toggleSidebar() {

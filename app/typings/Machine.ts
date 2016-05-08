@@ -1,6 +1,8 @@
 import {Status} from "../typings/Status";
 import {StatusBreakdown} from "../typings/StatusBreakdown";
 import {Observable} from 'rxjs'
+import {Fault} from "../typings/Fault";
+
 export interface MachineStream {
     cycle?: number;
     fault?: number;
@@ -9,27 +11,9 @@ export interface MachineStream {
     status?: Status;
 }
 
-const initialStatusData:Array<StatusBreakdown> = [{
-        status: Status.Online,
-        time: 1,
-        color: "#4CAF50"
-    },
-    {
-        status: Status.Offline,
-        time: 1,
-        color: "#F44336"
-    },
-    {
-        status: Status.Idle,
-        time: 1,
-        color: "#FFC107"
-    }];
 export class Machine {
     /// A stream of cycles
     cycleCount$: Observable<number>;
-
-    /// A stream of faults
-    faultCount$: Observable<number>;
 
     /// A stream of good parts
     goodPartCount$: Observable<number>;
@@ -58,30 +42,40 @@ export class Machine {
     /// Will Tick the oee as it changes.  
     oee$: Observable<number>;
 
+    /// A stream of faults
+    faultCount$: Observable<number>;
+
+    /// A stream of accumulated faults
+    faultLog$: Observable<Array<Fault>>;
+    
     /**
-     *
+     * A representation of a Machine which exposes it's api as Observables.
      */
     constructor(public name: string, stream: Observable<MachineStream>, idealCycleTime: number) {
         //---------------------------------
         // Part streams
-        this.cycleCount$ = stream.filter(item => 'cycle' in item).pluck('cycle').startWith(1);
+        this.cycleCount$ = stream.filter(item => 'cycle' in item).pluck('cycle').startWith(0);
+                
+        this.goodPartCount$ = stream.filter(item => 'goodPart' in item).pluck('goodPart').startWith(0);
         
-        this.faultCount$ = stream.filter(item => 'fault' in item).pluck('fault').startWith(1);
-        
-        this.goodPartCount$ = stream.filter(item => 'goodPart' in item).pluck('goodPart').startWith(1);
-        
-        this.rejectPartCount$ = stream.filter(item => 'rejectPart' in  item).pluck('rejectPart').startWith(1);
+        this.rejectPartCount$ = stream.filter(item => 'rejectPart' in  item).pluck('rejectPart').startWith(0);
 
         //---------------------------------
         // Status 
-        this.status$ = stream.filter(item => 'status' in item).pluck('status').startWith(Status.Idle);
+        this.status$ = stream.filter(item => 'status' in item).pluck('status').distinctUntilChanged().startWith(Status.Idle);
         
         this.statusName$ = this.status$.map(item => Status[item]);
-        
+
+        const initialStatusData:Array<StatusBreakdown> = [
+            { status: Status.Online, time: 0, color: "#4CAF50" },
+            { status: Status.Offline, time: 0, color: "#F44336" },
+            { status: Status.Idle, time: 0, color: "#FFC107" }
+        ];
+
         this.accumulatedStatusTime$ = Observable
             .combineLatest(this.status$, Observable.interval(1000))
             .map(item => item[0])
-            .scan((prev: Array<StatusBreakdown>, curr) => {
+            .scan((prev: Array<StatusBreakdown>, curr:Status) => {
                 let index = prev.findIndex(item => (item.status === curr));
                 let status: StatusBreakdown = prev[index];
                 return [
@@ -95,8 +89,8 @@ export class Machine {
         // Computed Properties
         // Calculations taken from: http://www.oee.com/calculating-oee.html
         this.availability$ = this.accumulatedStatusTime$.map((item) => {
-            const plannedProductionTime = item.reduce((prev, curr) => prev + curr.time, 0);
             const runtime = item.find(item => item.status === Status.Online).time;
+            const plannedProductionTime = item.reduce((prev, curr) => prev + curr.time, 0);
             return runtime / plannedProductionTime || 0;
         });
 
@@ -121,5 +115,48 @@ export class Machine {
                 const [aviability, performance, quality] = item;
                 return aviability * performance * quality || 0;
             });
+        
+        //---------------------------------
+        // Faults
+        this.faultCount$ = stream.filter(item => 'fault' in item).pluck('fault').startWith(0);
+
+        this.faultLog$ = Observable
+            .combineLatest(this.faultCount$, this.status$)
+            .scan((acc: { currentFaultCount:number, faults: Array<Fault> } , item: [number, Status]) =>  {
+                    const [currentFaultCount, status] = item;
+                    const lastFault = acc.faults[0];
+                    
+                    // Will find any faults without endtimes and set them.
+                    const closeFaults = (faults: Array<Fault>) => {
+                        return faults.map(item => {
+                            if (!item.endTime) {
+                                item.endTime = new Date();
+                            } 
+                            return item;
+                        });
+                    };
+                    
+                    /// If the number of faults increases create a new fault in the array.
+                    if (currentFaultCount !== acc.currentFaultCount) {
+                        return {
+                            currentFaultCount,
+                            faults: [
+                                ...closeFaults(acc.faults),
+                                new Fault(new Date())
+                            ]
+                        }
+                    }
+                    
+                    /// mark the end time if the status changes away from online
+                    if (status !== Status.Offline) {
+                        return {
+                            currentFaultCount,
+                            faults: closeFaults(acc.faults)
+                        }
+                    }
+                    
+                    return acc;
+                }, {currentFaultCount:0, faults:[]})
+                .pluck('faults')
     }
 }

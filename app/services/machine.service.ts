@@ -14,40 +14,58 @@ export class MachineService {
     // statusStream:Observable< = Observable.interval(1000 * 30);
 
     machineStream:BehaviorSubject<any> = new BehaviorSubject('');
+    status: Status = Status.Idle;
+    
     public cycleTime: number = 100;
     constructor(){
         this.machineStream = new BehaviorSubject('');
-        
-        let status: Status = Status.Idle;
-        // status interval
-        let faultCount = 0;
+        this.generateStatusData();
+        this.generateCycleData();
+        this.generateFaults();
+    }
+    
+    private generateStatusData() {
         setInterval(function(){
             let randomNumber = Math.random() * 100;
-            if (randomNumber < 85) {
-               status = Status.Online;
-            } else if (randomNumber < 95) {
-               status = Status.Offline;
-               this.machineStream.next({fault: faultCount++});
+            if (this.status === Status.Offline && randomNumber < 50) {
+               this.status = Status.Offline;
+            } else if (randomNumber < 90) {
+               this.status = Status.Online;
             } else {
-               status = Status.Idle;
+               this.status = Status.Idle;
             }
-            this.machineStream.next({status});
+            this.machineStream.next({status:this.status});
         }.bind(this), 1000 * 10);
-        this.machineStream.next({status});
-
+        this.machineStream.next({status:this.status});
+    }
+    
+    private generateCycleData() {
         // Cycle interval
         let cycleCount = 0;
         let goodPartCount = 0;
         let rejectPartCount = 0;
         const idealRunRate = .90;
         setInterval(function(){
-            if (status !== Status.Online) return;
+            if (this.status !== Status.Online) return;
             
-            this.machineStream.next({ cycle: cycleCount++ });
+            this.machineStream.next({ cycle: ++cycleCount });
             const isGoodPart = Math.random() < idealRunRate; // 9 in 10 chance of a good part
-            const payload = isGoodPart ? {goodPart: goodPartCount++} : {rejectPart: rejectPartCount++};
+            const payload = isGoodPart ? {goodPart: ++goodPartCount} : {rejectPart: ++rejectPartCount};
             this.machineStream.next(payload);
         }.bind(this), this.cycleTime);
+    }
+    
+    private generateFaults() {                
+        // Fault interval
+        let faultCount = 0;
+        const randomFault = () => {
+            this.machineStream.next({ fault: ++faultCount });
+            this.status = Status.Offline;
+            this.machineStream.next({status:this.status});
+            setTimeout(randomFault, Math.random() * 45 * 1000)
+        };
+        
+        setTimeout(randomFault, Math.random() * 45 * 1000)
     }
 
     getMachines():Promise<any> {
