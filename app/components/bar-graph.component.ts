@@ -12,12 +12,12 @@ export class BarModel {
 
 @Component({
     selector: 'bar-graph',
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None,//D3 has issues with styling through shadowDom
 
     styles: [`
         :host-context {
             width: 400px;
-            height: 350px;
+            height: 400px;
         }
         
         bar-graph p {
@@ -55,11 +55,12 @@ export class BarModel {
             transform: translateX(-50%);
             width: 450px;
             height: 450px;
+            overflow: visible !important;
         }
         
         @media (max-width: 567px) {
             bar-graph svg {
-                transform: scale(.7) translateX(-70%) translateY(-30%);
+                transform: scale(.60) translateX(-85%) translateY(-35%);
             }
         }
 
@@ -87,10 +88,10 @@ export class BarGraphComponent implements AfterViewInit, OnChanges {
     margin = {top: 20, right: 20, bottom: 30, left: 40};
     
     /// The height of the graph
-    height =  500 - this.margin.top - this.margin.bottom;
+    height =  450 - this.margin.top - this.margin.bottom;
     
     /// The width of the graph
-    width = 500 - this.margin.left - this.margin.right;
+    width = 450 - this.margin.left - this.margin.right;
     
     x = d3.scale.ordinal().rangeRoundBands([0, this.width], .1);
     y = d3.scale.linear().range([this.height, 0]);

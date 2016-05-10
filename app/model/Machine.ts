@@ -2,15 +2,7 @@ import {Status} from "./Status";
 import {StatusBreakdown} from "./StatusBreakdown";
 import {Observable} from 'rxjs'
 import {Fault} from "./Fault";
-
-export interface MachineStream {
-    cycle?: number;
-    fault?: number;
-    goodPart?: number;
-    rejectPart?: number;
-    status?: Status;
-}
-
+import {MachineStream} from './MachineStream'
 export class Machine {
     /// A stream of cycles
     cycleCount$: Observable<number>;

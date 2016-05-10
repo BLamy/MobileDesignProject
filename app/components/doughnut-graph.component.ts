@@ -49,7 +49,7 @@ import {PieModel} from "../model/PieModel";
         }
         
         doughnut-graph .full {
-            width: 100%;
+            width: auto;
         }
         
         doughnut-graph .box {

@@ -8,38 +8,30 @@ import {Injectable, OnInit} from 'angular2/core';
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/Rx";
 import {Status} from "../model/Status";
-
+import {Machine} from "../model/Machine";
+import {MachineStream} from '../model/MachineStream'
 @Injectable()
 export class MachineService {
-    // statusStream:Observable< = Observable.interval(1000 * 30);
-
-    machineStream:BehaviorSubject<any> = new BehaviorSubject('');
-    status: Status = Status.Idle;
+    cache: {[propName: string]: Observable<MachineStream>}  = {};
     
-    public cycleTime: number = 100;
-    constructor(){
-        this.machineStream = new BehaviorSubject('');
-        this.generateStatusData();
-        this.generateCycleData();
-        this.generateFaults();
-    }
+    private cycleTime: number = 100;
     
-    private generateStatusData() {
+    private generateData(machineStream) {
+        let status: Status = Status.Idle;
+        
         setInterval(function(){
             let randomNumber = Math.random() * 100;
-            if (this.status === Status.Offline && randomNumber < 50) {
-               this.status = Status.Offline;
+            if (status === Status.Offline && randomNumber < 50) {
+               status = Status.Offline;
             } else if (randomNumber < 90) {
-               this.status = Status.Online;
+               status = Status.Online;
             } else {
-               this.status = Status.Idle;
+               status = Status.Idle;
             }
-            this.machineStream.next({status:this.status});
+            machineStream.next({status:status});
         }.bind(this), 1000 * 10);
-        this.machineStream.next({status:this.status});
-    }
+        machineStream.next({status:status});
     
-    private generateCycleData() {
         // Cycle interval
         let cycleCount = 0;
         let goodPartCount = 0;
@@ -48,31 +40,35 @@ export class MachineService {
         setInterval(function(){
             if (this.status !== Status.Online) return;
             
-            this.machineStream.next({ cycle: ++cycleCount });
+            machineStream.next({ cycle: ++cycleCount });
             const isGoodPart = Math.random() < idealRunRate; // 9 in 10 chance of a good part
             const payload = isGoodPart ? {goodPart: ++goodPartCount} : {rejectPart: ++rejectPartCount};
-            this.machineStream.next(payload);
+            machineStream.next(payload);
         }.bind(this), this.cycleTime);
-    }
     
-    private generateFaults() {                
         // Fault interval
         let faultCount = 0;
         const randomFault = () => {
-            this.machineStream.next({ fault: ++faultCount });
-            this.status = Status.Offline;
-            this.machineStream.next({status:this.status});
+            machineStream.next({ fault: ++faultCount });
+            status = Status.Offline;
+            machineStream.next({status:status});
             setTimeout(randomFault, Math.random() * 45 * 1000)
         };
         
         setTimeout(randomFault, Math.random() * 45 * 1000)
     }
+    
+    getMachine(machineName:string):Machine {
+        if (this.cache[machineName]) {
+            return new Machine(machineName, this.cache[machineName], this.cycleTime/1000);
+        }
 
-    getMachines():Promise<any> {
-        return Promise.resolve(MACHINES);
+        this.cache[machineName] = new BehaviorSubject<MachineStream>({});
+        this.generateData(this.cache[machineName]);
+        return new Machine(machineName, this.cache[machineName], this.cycleTime/1000);
     }
 
-    changes():BehaviorSubject<any> {
-        return this.machineStream;
+    getMachines(machineNames:Array<string>):Array<Machine> {
+        return machineNames.map(name => this.getMachine(name));
     }
 }

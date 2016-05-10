@@ -12,7 +12,9 @@ import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
 import {Status} from "./model/Status";
 import {PieModel} from "./model/PieModel";
 import {Fault} from "./model/Fault";
+import {MachineStream} from "./model/MachineStream";
 import {Observable} from "rxjs/Observable";
+import {BehaviorSubject} from 'rxjs';
 
 @App({
     providers: [MachineService],
@@ -208,8 +210,7 @@ import {Observable} from "rxjs/Observable";
                 height: 400px;
             }
         }
-
-  `],
+   `],
     template: `
     <app-scaffold>
         <app-sidebar>
@@ -217,7 +218,7 @@ import {Observable} from "rxjs/Observable";
                 <span class="avatar">BL</span><span class="username">Brett Lamy</span>
             </div>
             <ul>
-                <li *ngFor="#machine of machines$ | async" (click)="changeActiveMachine(machine)" class="{{machine.status}}-border">
+                <li *ngFor="#machine of machines" (click)="changeActiveMachine(machine)" class="{{machine.statusName$ | async}}-border">
                     {{machine.name}}
                 </li>
             </ul>
@@ -270,15 +271,16 @@ export class MyApp {
 
     /// Setting this variable will toggle the sidebar on mobile/tablets. Sidebar is always open on desktop.
     isSidebarOpen:boolean = false;
-
-    /// All the machines
-    machines$:Promise<Machine> = this.machineService.getMachines();
     
-    /// Contains a stream of all possible events.
-    changeStream = this.machineService.changes();
+    // All the machines
+    machines: Array<Machine> = this.machineService.getMachines([
+        "Machine 1",
+        "machine 2",
+        "Machine 3"
+    ]);
 
     /// THe currently active machine
-    activeMachine: Machine = new Machine("Machine 1", this.changeStream, this.machineService.cycleTime/1000);
+    activeMachine: Machine = this.machines[0];
     
     /// The reduction of data for the DoughnutGraphComponent
     doughnutGraphData$:Observable<Array<PieModel>> = this.activeMachine.accumulatedStatusTime$.map(breakdown => {
@@ -308,7 +310,8 @@ export class MyApp {
                                                           
     constructor(platform:Platform, public machineService:MachineService) {
         platform.ready().then(() => {
-            StatusBar.styleDefault();
+            // StatusBar.styleLightContent();
+            StatusBar.hide();
         });
     }
 
@@ -317,6 +320,7 @@ export class MyApp {
     }
 
     changeActiveMachine(machine: Machine) {
+        this.activeMachine = machine;
         // TODO: Implement Multiple machines
         // this.activeMachine = machine;
     }
