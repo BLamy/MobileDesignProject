@@ -7,7 +7,7 @@ import {MACHINES} from './mock-machines';
 import {Injectable, OnInit} from 'angular2/core';
 import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/Rx";
-import {Status} from "../typings/Status";
+import {Status} from "../model/Status";
 
 @Injectable()
 export class MachineService {

@@ -3,16 +3,16 @@ import {App, Platform} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {OnInit} from "angular2/core";
 import {MachineService} from "./services/machine.service";
-import {Machine} from "./typings/Machine";
+import {Machine} from "./model/Machine";
 import {AppScaffoldComponent, AppContentComponent, AppSidebarComponent} from "./components/app-scaffold.component";
 import {BarGraphComponent} from "./components/bar-graph.component";
 import {BarChartComponent} from "./components/bar-chart.component";
 import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
-import {Status} from "./typings/Status";
-import {PieModel} from "./typings/PieModel";
-import {Fault} from "./typings/Fault";
+import {Status} from "./model/Status";
+import {PieModel} from "./model/PieModel";
+import {Fault} from "./model/Fault";
 import {Observable} from "rxjs/Observable";
 
 @App({
@@ -29,86 +29,86 @@ import {Observable} from "rxjs/Observable";
     ],
     styles: [`
         app-sidebar #SidebarHeader {
-        position: relative;
-        background-color: #212121;
-        height: 62px;
-        line-height: 62px;
-        width: 100%;
-        border-bottom: 1px solid black;
-        color: white;
+            position: relative;
+            background-color: #212121;
+            height: 62px;
+            line-height: 62px;
+            width: 100%;
+            border-bottom: 1px solid black;
+            color: white;
         }
         
         app-sidebar #SidebarHeader .avatar {
-        background: #3474e1;
-        border-radius: 100%;
-        border: 1px solid white;
-        padding: 10px;
-        margin: 0 15px;
+            background: #3474e1;
+            border-radius: 100%;
+            border: 1px solid white;
+            padding: 10px;
+            margin: 0 15px;
         }
         
         #LinegraphWrapper {
-        width: 100%;
-        height: 30vh;
-        min-height: calc(64px * 4);
-        position: relative;
+            width: 100%;
+            height: 30vh;
+            min-height: calc(64px * 4);
+            position: relative;
         }
         
         line-graph {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+            position: absolute;
+            bottom: 0;
+            right: 0;
         }
             
         #CommentBar {
-        height: 5vh;
-        width: 100%;
-        min-height: 44px;
+            height: 5vh;
+            width: 100%;
+            min-height: 44px;
         }
         
         #DashboardFlex {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 5px;
+            display: flex;
+            flex-wrap: wrap; 
+            margin: 5px;
         }
         
         .card {
-        position: relative;
-        overflow: hidden;
-        background-color: white;
-        border-radius: 2px;
-        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            background-color: white;
+            border-radius: 2px;
+            transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                        0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                        0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
         
         .card.small {
-        margin: 10px;
-        padding: 20px;
-        width: calc(100% / 4 - 20px);
-        min-height: 80px;
+            margin: 10px;
+            padding: 20px;
+            width: calc(100% / 4 - 20px);
+            min-height: 80px;
         }
         
         .card.medium {
-        margin: 10px;
-        padding: 20px;
-        width: calc(100% / 2 - 20px);
-        }
-        
-        .card.large {
-        margin: 20px;
-        padding: 20px;
-        width: 100%;
-        }
-        
-        @media (max-width: 1023px) {
-        .card.small {
+            margin: 10px;
+            padding: 20px;
             width: calc(100% / 2 - 20px);
         }
         
-        .card.medium {
+        .card.large {
+            margin: 20px;
+            padding: 20px;
             width: 100%;
         }
+        
+        @media (max-width: 1023px) {
+            .card.small {
+                width: calc(100% / 2 - 20px);
+            }
+            
+            .card.medium {
+                width: 100%;
+            }
         }
         
         #Menu {
@@ -141,6 +141,7 @@ import {Observable} from "rxjs/Observable";
             left: 50%;
             transform: translateX(-50%);
         }
+        
         .card.small>i {
             position: absolute;
             top: 40%;
@@ -155,56 +156,61 @@ import {Observable} from "rxjs/Observable";
         }
         
         ul {
-        margin: 0;
-        padding: 15px;
-        list-style:none;
+            margin: 0;
+            padding: 15px;
+            list-style:none;
         }
         
         li {
-        color: white;
-        margin: 10px;
-        padding: 10px;
+            color: white;
+            margin: 10px;
+            padding: 10px;
         }
         
         .Online-border {
-        border-left: 2px solid #66BB6A;
+            border-left: 2px solid #66BB6A;
         }
         
         .Offline-border {
-        border-left: 2px solid #F44336;
+            border-left: 2px solid #F44336;
         }
         
         .Idle-border {
-        border-left: 2px solid #FFC107;
+            border-left: 2px solid #FFC107;
         }
         .Online {
-        background-color: #66BB6A;
+            background-color: #66BB6A;
         }
         
         .Offline {
-        background-color: #F44336;
+            background-color: #F44336;
         }
         
         .Idle {
-        background-color: #FFC107;
+            background-color: #FFC107;
         }
         
         .Online-dark {
-        background-color: #388E3C;
+            background-color: #388E3C;
         }
         
         .Offline-dark {
-        background-color: #D32F2F;
+            background-color: #D32F2F;
         }
         
         .Idle-dark {
-        background-color: #FFA000;
+            background-color: #FFA000;
         }
         
         .center-text {
-        text-align:center
+            text-align:center
         }
-        
+        @media (max-width: 567px) {
+            .card.medium {
+                height: 400px;
+            }
+        }
+
   `],
     template: `
     <app-scaffold>
@@ -248,11 +254,11 @@ import {Observable} from "rxjs/Observable";
                     <p class="percent-metric">{{activeMachine.oee$ | async | percent:'1.0-0'}}</p>
                 </div>
                 
-                <div class="card medium center-text">
-                    <doughnut-graph title="Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph>
+                <div class="card medium">
+                    <doughnut-graph title="Today's Status Breakdown" [data]="doughnutGraphData$ | async"></doughnut-graph>
                 </div>
-                <div class="card medium center-text">
-                    <bar-graph [data]="barGraphData$ | async"></bar-graph>
+                <div class="card medium">
+                    <bar-graph title="Recent Fault Durations" [data]="barGraphData$ | async"></bar-graph>
                 </div>
                 
             </div>

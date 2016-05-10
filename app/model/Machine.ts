@@ -1,7 +1,7 @@
-import {Status} from "../typings/Status";
-import {StatusBreakdown} from "../typings/StatusBreakdown";
+import {Status} from "./Status";
+import {StatusBreakdown} from "./StatusBreakdown";
 import {Observable} from 'rxjs'
-import {Fault} from "../typings/Fault";
+import {Fault} from "./Fault";
 
 export interface MachineStream {
     cycle?: number;

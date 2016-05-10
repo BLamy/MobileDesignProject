@@ -6,24 +6,31 @@ import {
     ViewChild, AfterViewInit
 } from "angular2/core";
 import * as d3 from 'd3'
-import {PieModel} from "../typings/PieModel";
+import {PieModel} from "../model/PieModel";
 
 @Component({
     selector: 'doughnut-graph',
     encapsulation: ViewEncapsulation.None,
     styles:[`
         :host-context {
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-          position: relative;
+            display:block;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            position: relative;
+            width: 450px;
+            height: 450px;
         }
         doughnut-graph svg {
-          width: 450px;
-          height: 450px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
+            height: 450px;
         }
         
         doughnut-graph p {
           font-weight: bold;
           font-size: 18px;
+          text-align: center;
         }
         
         doughnut-graph path.slice{
@@ -52,11 +59,24 @@ import {PieModel} from "../typings/PieModel";
             margin: 0 10px;
             border-radius: 100%;
         }
+        
+        @media (max-width: 567px) {
+            doughnut-graph svg {
+                transform: scale(.7) translateX(-70%) translateY(-30%);
+            }
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     `],
     template: `
         <p>{{title}}</p>
         <svg #target></svg>
-        <div class="flex">
+        <div class="flex legend">
             <div class="full"></div>
             <div *ngFor="#model of data" class="flex">
                 <span class="box" [style.backgroundColor]="model.color"></span><span class="box-name">{{model.label}}</span>

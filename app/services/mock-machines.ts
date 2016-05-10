@@ -1,5 +1,5 @@
-import {Machine} from "../typings/Machine";
-import {Status} from "../typings/Status";
+import {Machine} from "../model/Machine";
+import {Status} from "../model/Status";
 
 export var MACHINES: Machine[]= [
     {
