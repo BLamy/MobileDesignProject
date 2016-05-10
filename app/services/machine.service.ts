@@ -38,7 +38,7 @@ export class MachineService {
         let rejectPartCount = 0;
         const idealRunRate = .90;
         setInterval(function(){
-            if (this.status !== Status.Online) return;
+            if (status !== Status.Online) return;
             
             machineStream.next({ cycle: ++cycleCount });
             const isGoodPart = Math.random() < idealRunRate; // 9 in 10 chance of a good part
