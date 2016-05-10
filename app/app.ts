@@ -6,7 +6,6 @@ import {MachineService} from "./services/machine.service";
 import {Machine} from "./model/Machine";
 import {AppScaffoldComponent, AppContentComponent, AppSidebarComponent} from "./components/app-scaffold.component";
 import {BarGraphComponent} from "./components/bar-graph.component";
-import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
 import {Status} from "./model/Status";
@@ -19,7 +18,6 @@ import {AnalyticsDashboardComponent} from "./components/analytics-dashboard.comp
 
 @App({
     providers: [MachineService],
-    pipes: [PercentPipe],
     directives: [
         AppScaffoldComponent,
         AppContentComponent,
@@ -123,7 +121,7 @@ import {AnalyticsDashboardComponent} from "./components/analytics-dashboard.comp
             </ul>
         </app-sidebar>
         <app-content [class.open]="isSidebarOpen">
-            <analytics-dashboard (toggleMenu)="toggleSidebar()" [machine]="activeMachine"></analytics-dashboard>
+            <analytics-dashboard (toggleMenu)="toggleSidebar()" *ngFor="#machine of machines" [machine]="machine" [hidden]="machine !== activeMachine"></analytics-dashboard>
         </app-content>
     <app-scaffold>
   `,

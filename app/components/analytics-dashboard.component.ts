@@ -6,10 +6,13 @@ import {Machine} from "../model/Machine";
 import {Status} from "../model/Status";
 import {PieModel} from "../model/PieModel";
 import {Observable} from "rxjs/Observable";
+import {PercentPipe} from "angular2/common";
 
 @Component({
     selector: 'analytics-dashboard',
-    
+
+    pipes: [PercentPipe],
+
     directives: [
         BarGraphComponent,
         LineGraphComponent,
