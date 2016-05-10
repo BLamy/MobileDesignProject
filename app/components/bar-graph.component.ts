@@ -21,6 +21,7 @@ export class BarModel {
         }
         
         bar-graph p {
+          text-align: center;
           font-weight: bold;
           font-size: 18px;
         }
@@ -47,6 +48,22 @@ export class BarModel {
         bar-graph .x.axis path {
             display: none;
         }
+        
+        bar-graph svg {
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
+            height: 450px;
+        }
+        
+        @media (max-width: 567px) {
+            bar-graph svg {
+                transform: scale(.7) translateX(-70%) translateY(-30%);
+            }
+        }
+
+
     `],
     template: `
         <p>{{title}}</p>

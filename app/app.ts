@@ -6,7 +6,6 @@ import {MachineService} from "./services/machine.service";
 import {Machine} from "./model/Machine";
 import {AppScaffoldComponent, AppContentComponent, AppSidebarComponent} from "./components/app-scaffold.component";
 import {BarGraphComponent} from "./components/bar-graph.component";
-import {BarChartComponent} from "./components/bar-chart.component";
 import {PercentPipe} from "angular2/common";
 import {LineGraphComponent} from "./components/line-graph.component";
 import {DoughnutGraphComponent} from "./components/doughnut-graph.component";
@@ -23,7 +22,6 @@ import {Observable} from "rxjs/Observable";
         AppContentComponent,
         AppSidebarComponent,
         BarGraphComponent,
-        BarChartComponent,
         LineGraphComponent,
         DoughnutGraphComponent
     ],
