@@ -7,7 +7,7 @@ import {Component, ContentChild, AfterContentInit} from "angular2/core";
           position: absolute;
           height: 100%;
           background: #303030;
-          width: 300px;
+          width: 280px;
         }
       `],
     template: '<ng-content></ng-content>'
@@ -29,13 +29,13 @@ export class AppSidebarComponent {}
         }
         
         :host-context(.open) {
-            transform: translateX(300px);
+            transform: translateX(280px);
         }
         
         @media screen and (min-width: 1400px) {
             :host-context {
-                transform: translateX(300px);
-                width: calc(100% - 300px);
+                transform: translateX(280px);
+                width: calc(100% - 280px);
             }
         }
 

@@ -18,10 +18,9 @@ export class MachineService {
     
     private generateData(machineStream) {
         let status: Status = Status.Idle;
-        
-        setInterval(function(){
+        const rotateStatuses = () => {
             let randomNumber = Math.random() * 100;
-            if (status === Status.Offline && randomNumber < 50) {
+            if (status === Status.Offline && randomNumber < 20) {
                status = Status.Offline;
             } else if (randomNumber < 90) {
                status = Status.Online;
@@ -29,29 +28,30 @@ export class MachineService {
                status = Status.Idle;
             }
             machineStream.next({status:status});
-        }.bind(this), 1000 * 10);
-        machineStream.next({status:status});
+            setTimeout(rotateStatuses, 1000 * 10);
+        };
+        setTimeout(rotateStatuses, 1000 * 5);
     
         // Cycle interval
         let cycleCount = 0;
         let goodPartCount = 0;
         let rejectPartCount = 0;
         const idealRunRate = .90;
-        setInterval(function(){
+        setInterval(() =>{
             if (status !== Status.Online) return;
             
             machineStream.next({ cycle: ++cycleCount });
             const isGoodPart = Math.random() < idealRunRate; // 9 in 10 chance of a good part
             const payload = isGoodPart ? {goodPart: ++goodPartCount} : {rejectPart: ++rejectPartCount};
             machineStream.next(payload);
-        }.bind(this), this.cycleTime);
+        }, this.cycleTime);
     
         // Fault interval
         let faultCount = 0;
         const randomFault = () => {
             machineStream.next({ fault: ++faultCount });
             status = Status.Offline;
-            machineStream.next({status:status});
+            machineStream.next({ status });
             setTimeout(randomFault, Math.random() * 45 * 1000)
         };
         

@@ -54,7 +54,7 @@ export class Machine {
 
         //---------------------------------
         // Status 
-        this.status$ = stream.filter(item => 'status' in item).pluck('status').distinctUntilChanged().startWith(Status.Idle);
+        this.status$ = stream.filter(item => 'status' in item).pluck('status').distinctUntilChanged().startWith(Status.Online);
         
         this.statusName$ = this.status$.map(item => Status[item]);
 
